@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">WhereAreTheEyes</string>
+    <string name="username_instructions">Please choose a username at eyes.daylightingsociety.org and insert it above.</string>
+    <string name="account_settings_description">Account Options</string>
+    <string name="ui_settings_description">UI Options</string>
+    <string name="no_username_alert">Please register a username online and set it in Settings</string>
+    <string name="needs_location_explanation">WhereAreTheEyes requires access to your location to find nearby cameras. Please grant this permission and restart the app.</string>
+    <string name="view_permissions_button">View Permissions</string>
+    <string name="marking_failed_title">Marking camera failed</string>
+    <string name="username_invalid">Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?</string>
+    <string name="ratelimit_failed">You are marking pins too quickly. To protect the integrity of the map we cannot allow you to mark cameras for a while.</string>
+    <string name="geoip_failed">Your IP address and physical location do not match. To protect the integrity of the map we cannot allow you to mark pins with a proxy.</string>
+    <string name="marking_failed">Unknown error, or server unreachable.</string>
+    <string name="confirm">Confirm</string>
+    <string name="mark_camera_confirmation">Mark a camera at this location?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="okay">Okay</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="register">Register</string>
+    <string name="help_title">About "Where are the Eyes"</string>
+    <string name="confirm_pins_preference">Confirm marking pins</string>
+    <string name="show_score_preference">Show score</string>
+    <string name="help_text">Where are the Eyes is a tool for detecting and evading surveillance. Together, you and other users build a map of surveillance cameras to protect activists, students, and other at-risk minorities. When you pass a camera press the "Eye" button. This will add it to the map, or verify its existence if we already know about it.\n\nRed marks indicate known cameras. A blue dot shows your location. Stay safe.\n\nAll button icons from Open Iconic under the MIT license. The app "eye" icon was created by Amanda Howanice for this project.\n\nFurther information can be found at eyes.daylightingsociety.org</string>
+</resources>

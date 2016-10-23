@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:mapbox="http://schemas.android.com/apk/lib/org.daylightingsociety.wherearetheeyes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    tools:context="org.daylightingsociety.wherearetheeyes.MainActivity">
+
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/map"
+        android:layout_above="@+id/buttonBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true" />
+
+    <LinearLayout
+        android:id="@+id/scoreBar"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        style="@android:style/ButtonBar"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="#000000">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Username"
+            android:id="@+id/username"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="5dp" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".10"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/camera"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Score"
+            android:id="@+id/camera_score"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:gravity="center_vertical"
+            android:background="@drawable/thumb_up"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Score"
+            android:id="@+id/verification_score"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        style="@android:style/ButtonBar"
+        android:gravity="center"
+        android:background="#000000">
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".10"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:id="@+id/settings"
+            android:background="@drawable/cog"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:onClick="openSettings"
+            android:layout_gravity="center_vertical|start" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".30"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/camera"
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:enabled="true"
+            android:background="@drawable/eye"
+            android:onClick="markOrVerifyCamera"
+            android:width="200dp" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".30"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:gravity="center_vertical"
+            android:id="@+id/help"
+            android:background="@drawable/help"
+            android:width="100dp"
+            android:onClick="openHelp"
+            android:layout_gravity="center_vertical|end" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".10"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

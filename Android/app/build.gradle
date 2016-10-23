@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
+    defaultConfig {
+        applicationId "org.daylightingsociety.wherearetheeyes"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    // This will pull in the latest stable version of MapBox
+    compile('com.mapbox.mapboxsdk:mapbox-android-sdk:4.1.1@aar') {
+        transitive = true
+    }
+    // Pull in support for defining the width of GUI elements with a percent
+    compile('com.android.support:percent:23.2.1') {
+
+    }
+}

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Onde estão os Olhos</string>
+    <string name="username_instructions">Por favor, escolha um  nome de usuário em eyes.daylightingsociety.org e insira-o acima.</string>
+    <string name="account_settings_description">Opções de conta</string>
+    <string name="ui_settings_description">Opções de interface de usuário</string>
+    <string name="no_username_alert">Por favor, registre um nome de usuário online e insira-o em Configurações</string>
+    <string name="needs_location_explanation">Onde estão os Olhos requer acesso à sua localização para encontrar câmeras próximas. Por favor, permita o acesso e reinicie o aplicativo.</string>
+    <string name="view_permissions_button">Exibir permissões</string>
+    <string name="marking_failed_title">Marcação de câmara falhou</string>
+    <string name="username_invalid">Seu nome de usuário não foi reconhecido pelo eyes.daylightingsociety.org. Ele está registrado em nosso site?</string>
+    <string name="geoip_failed">Seu endereço de IP e localização física não coincidem. Para proteger a integridade do mapa não podemos permitir que você marque pontos com um proxy.</string>
+    <string name="marking_failed">Erro desconhecido ou servidor inacessível.</string>
+    <string name="confirm">Confirmar</string>
+    <string name="mark_camera_confirmation">Marcar uma câmara nesse local?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="okay">Ok</string>
+    <string name="dismiss">Abandonar</string>
+    <string name="register">Registrar</string>
+    <string name="help_title">Sobre "Onde estão os Olhos"</string>
+    <string name="help_text">Onde estão os Olhos é uma ferramenta de detecção e evasão de vigilância. Juntos, você e outros usuários constroem um mapa de câmeras de vigilância para proteger ativistas, estudantes e outras minorias em situação de risco. Quando você passar por uma câmera, aperte o botão "olho". Isto adicionará a câmara ao mapa ou verificará sua existência se já soubermos sobre ela.\n\nMarcas vermelhas indicam câmeras conhecidas. Um ponto azul mostra sua localização. Fique em segurança.\n\nTodos os ícones de botão de Open Iconic estão sob a licença MIT. O ícone "olho" do app foi criado por Amanda Howanice para este projeto.\n\nMaiores informações podem ser encontradas em eyes.daylightingsociety.org.</string>
+    <string name="confirm_pins_preference">Confirmar pinos</string>
+    <string name="show_score_preference">Mostrar pontuação</string>
+    <string name="ratelimit_failed">Está a marcação pinos muito rapidamente. Para proteger a integridade do mapa não podemos permitir que você marque câmeras por um tempo.</string>
+</resources>

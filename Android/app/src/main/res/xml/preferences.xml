@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/account_settings_description">
+        <EditTextPreference
+            android:inputType="textNoSuggestions"
+            android:key="username_preference"
+            android:title="Username"
+            android:defaultValue=""
+            android:summary="@string/username_instructions">
+            ></EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/ui_settings_description">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="confirm_marking_pins"
+            android:title="@string/confirm_pins_preference" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="show_score"
+            android:title="@string/show_score_preference" />
+    </PreferenceCategory>
+</PreferenceScreen>

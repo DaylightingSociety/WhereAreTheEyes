@@ -35,9 +35,15 @@ rm -rf $ANDROID/local.properties
 rm -rf $ANDROID/app/*apk
 rm -rf $ANDROID/app/proguard*
 rm -rf $ANDROID/app/build/*
+rm -rf $ANDROID/projectFilesBackup
+rm -rf $ANDROID/.idea/workspace.xml
+rm -rf $ANDROID/.idea/libraries
 
 echo "Clearing Android API token..."
 sed -i -e 's/APIKEY.*/APIKEY = "CENSORED";/' $ANDROID_CODE/Constants.java
+
+echo "Clearing sed backup files..."
+find . -name "*-e" -exec rm {} \;
 
 echo ""
 echo "If the above commands finished without error you are clear to push to the public branch."

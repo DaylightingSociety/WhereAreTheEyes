@@ -45,5 +45,8 @@ sed -i -e 's/APIKEY.*/APIKEY = "CENSORED";/' $ANDROID_CODE/Constants.java
 echo "Clearing sed backup files..."
 find . -name "*-e" -exec rm {} \;
 
+echo "Clearing OSX filesystem cache..."
+find . -name ".DS_Store" -exec rm {} \;
+
 echo ""
 echo "If the above commands finished without error you are clear to push to the public branch."

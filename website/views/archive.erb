@@ -1,0 +1,15 @@
+<link href="/styles/markdown.css" rel="stylesheet" type="text/css">
+<div class="panel">
+<div class="markdown">
+<h2>Archive of Status Posts</h2>
+<p>
+<% for post in posts %>
+	<a href="/post/<%= post %>"><%= post %></a><br>	
+<% end %>
+</p>
+<p>
+<a href="/allPosts">View All Posts</a><br>
+<a href="/rss">RSS Feed of Posts</a><br>
+</p>
+</div>
+</div>

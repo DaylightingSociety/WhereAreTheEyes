@@ -1,0 +1,36 @@
+<link href="/styles/register.css" rel="stylesheet" type="text/css">
+<div class="panel">
+<div class="register">
+<br>
+<p>You must register an account to mark new cameras on the map with our mobile app. This is so that we can tell when two different people have verified the existence of a camera. Please choose a username unrelated to any other account or that can be tied back to you.</p>
+<% if( defined?(errorMsg) != nil ) %>
+<p><i>Error: <%= errorMsg %></i></p>
+<% end %>
+<noscript>
+<h3>Registration requires javascript for security reasons.</h3>
+</noscript>
+<script type="text/javascript">
+function addCaptcha() {
+	var form = document.getElementById('register');
+	var lbl = document.getElementById('captchatext');
+	var captcha = document.createElement('input');
+	captcha.type = 'checkbox';
+	captcha.name = "<%= token %>";
+	form.insertBefore(captcha, lbl.nextSibling);
+}
+document.addEventListener("DOMContentLoaded", addCaptcha);
+</script>
+<form id="register"  action="/register" method="post">
+	<label>Username:</label><input type="text" placeholder="John Doe" name=username><br>
+	<label id="captchatext">Are you human? </label>
+	<br><br>
+	<div class="buttonHolder">
+	<label><input class="button" type="submit" value="Register"></label>
+	</div>
+</form>
+<p><i>A note on anonymity:</i></p>
+<p>We have made our best efforts to ensure that your username cannot reveal your movements. However, if you use our mobile app without marking any cameras then we guarantee your username will never be sent to our server.</p>
+<p>Your personal information will never be willfully shared with any third party, and is stored in such a way that we do not know the usernames of our users.</p>
+</div>
+</div>
+<img src="images/cctv_grayscale_laplace.png">

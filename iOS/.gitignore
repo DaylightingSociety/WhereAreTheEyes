@@ -1,0 +1,6 @@
+# Ignore caching from Xcode
+project.xcworkspace
+# Ignore anything saved about individual developers
+*.xcuserdatad
+# Also ignore the enclosing folder for the individual dev data
+xcuserdata 

@@ -14,6 +14,7 @@ require_relative 'backup'
 require_relative 'log'
 require_relative 'location'
 require_relative 'ratelimit'
+require_relative 'export'
 
 module State
 	$secret = ""
@@ -37,6 +38,10 @@ module State
 
 		unless( Dir.exists?(Configuration::RateLimitDir) )
 			Dir.mkdir(Configuration::RateLimitDir)
+		end
+
+		unless( Dir.exists?(Configuration::ExportDir) )
+			Dir.mkdir(Configuration::ExportDir)
 		end
 
 		unless( File.file?(Configuration::LoginDatabase) )
@@ -129,6 +134,23 @@ module State
 		end
 	end
 
+	private_class_method def State.exportCycle
+		loop do
+			begin
+				Log.debug("Initiating export sleep cycle...")
+				sleep (Configuration::ExportPeriod)
+				target = Time.now.strftime("%Y-%m-%d.csv")
+				path = Export.exportPinsCSV(target)
+				if( Configuration::ExportImageEnabled )
+					system("#{Configuration::ExportImageScript} #{path} #{Configuration::ExportImagePath}")
+				end
+			rescue => e
+				Log.warning("Export thread crashed: #{e.message}")
+				Log.warning("Export thread crash backtrace:\n#{e.backtrace.to_s}")
+			end
+		end
+	end
+
 	def State.startWatchdog
 		fork do
 			$0 = Configuration::WatchdogProcessName
@@ -138,11 +160,14 @@ module State
 			deprecationThread = Thread.new do deprecateCycle end
 			backupThread = Thread.new do backupCycle end
 			ratelimitThread = Thread.new do ratelimitCycle end
+			exportThread = Thread.new do exportCycle end
 
 			# To prevent the subprocess from exiting we block the main thread
 			deprecationThread.join
 			Log.error("Deprecation thread exited infinite loop!")
 			backupThread.join 
+			ratelimitThread.join
+			exportThread.join
 		end
 	end
 

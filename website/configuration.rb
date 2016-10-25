@@ -3,15 +3,19 @@
 module Configuration
 	# Pathnames
 	Private = File.dirname(__FILE__) + "/private"
+	Public = File.dirname(__FILE__) + "/public"
 	Tmp = File.dirname(__FILE__) + "/tmp"
 	PostsDirName = "posts"
 	PostsDir = Private + "/" + PostsDirName
 	PreviewDir = Private + "/preview"
 	PinDir = Private + "/pins"
 	BackupDir = Private + "/backups"
+	ExportDir = Public + "/rawdata"
+	ExportImageScript = File.dirname(__FILE__) + "/camimage.py"
 	LoginDatabase = Private + "/login.db"
 	ScoreDatabase = Private + "/scores.db"
 	GeoIPDatabase = Private + "/GeoLiteCity.dat"
+	ExportImagePath = Public + "/currentCameras.png"
 
 	# Logging config
 	DebugEnabled = false
@@ -60,6 +64,11 @@ module Configuration
 	BackupRolloverHour = 4 # When do we rotate backups (4 AM)
 	WatchdogProcessName = "WhereAreTheEyes Watchdog"
 	WatchdogPIDFile = Tmp + "/watchdog.pid"
+
+	# Export Config
+	ExportEnabled = true
+	ExportImageEnabled = true # Requires Python, numpy, matplotlib, etc
+	ExportPeriod = 86400 # 24 hours, in seconds
 
 	# Map config
 	MaxPinDisplayRadius = 500 # Measured in something

@@ -81,6 +81,20 @@ get '/post/:name' do |name|
 	end
 end
 
+get '/rawdata/' do
+	redirect to("/rawdata")
+end
+
+get '/rawdata' do
+	filenames = Dir.entries(Configuration::ExportDir).select do |f|
+		File.file?(Configuration::ExportDir + "/" + f) and f.end_with?(".csv")
+	end
+	filenames.sort!
+	filenames.reverse! # Put newest data on top
+	dirname = File.basename(Configuration::ExportDir)
+	erb :rawdata, :locals => { :datadir => dirname, :files => filenames }
+end
+
 get '/downloads' do
 	erb :downloads
 end

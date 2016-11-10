@@ -7,6 +7,7 @@ IOS_CODE="$DIR/iOS/Where Are The Eyes/Where Are The Eyes"
 IOS_PROJ="$DIR/iOS/Where Are The Eyes/Where Are The Eyes.xcodeproj"
 ANDROID="$DIR/Android"
 ANDROID_CODE="$ANDROID/app/src/main/java/org/daylightingsociety/wherearetheeyes"
+PUBLIC_API_KEY="pk.eyJ1IjoibWlsby10cnVqaWxsbyIsImEiOiJjaXZiZTBua2IwMTF1MnRtcWRra2Z3ZGdoIn0.12wTGPPbJeyjaiJagmGC3Q"
 
 echo "Detected paths:"
 echo "WEB = $WEB"
@@ -27,7 +28,7 @@ rm -rf "${IOS_PROJ}/xcuserdata"
 # For iOS we need to match two lines of a plist, but "sed" doesn't support
 # matching across multiple lines. Here goes some Perl nastiness...
 echo "Clearing iOS API token..."
-perl -0 -p -i -e 's/MGLMapboxAccessToken.*?<\/string>/MGLMapboxAccessToken<\/key>\n\t<string>CENSORED<\/string>/s' "${IOS_CODE}/Info.plist"
+perl -0 -p -i -e "s/MGLMapboxAccessToken.*?<\/string>/MGLMapboxAccessToken<\/key>\n\t<string>${PUBLIC_API_KEY}<\/string>/s" "${IOS_CODE}/Info.plist"
 
 echo "Clearing Android Studio junk..."
 rm -rf $ANDROID/build/*
@@ -40,7 +41,7 @@ rm -rf $ANDROID/.idea/workspace.xml
 rm -rf $ANDROID/.idea/libraries
 
 echo "Clearing Android API token..."
-sed -i -e 's/APIKEY.*/APIKEY = "CENSORED";/' $ANDROID_CODE/Constants.java
+sed -i -e "s/APIKEY.*/APIKEY = \"${PUBLIC_API_KEY}\";/" $ANDROID_CODE/Constants.java
 
 echo "Clearing sed backup files..."
 find "${DIR}" -name "*-e" -exec rm {} \;

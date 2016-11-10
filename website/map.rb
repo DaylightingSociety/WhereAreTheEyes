@@ -48,6 +48,16 @@ class Pin
 		return true
 	end
 
+	# Attempts to remove any verifications by a particular user
+	# returns true if any verifications removed, false otherwise
+	def unverify(username)
+		hash = hashUser(username)
+		size = @verifies.size
+		@verifies.delete_if{ |h| h[0] == hash }
+		newSize = @verifies.size
+		return !(size == newSize)
+	end
+
 	# How many people have verified this pin?
 	def verifies
 		return @verifies.size
@@ -131,6 +141,8 @@ module Map
 		end
 	end
 
+	# (Re)saves a pin to the database. Adds the pin if it doesn't exist,
+	# updates if it already does so we can save new verification data.
 	private_class_method def self.savePin(p)
 		fname = getZoneFile(p.latitude, p.longitude)
 		path = Configuration::PinDir + "/" + fname
@@ -143,11 +155,12 @@ module Map
 				if( pins[i].latitude == p.latitude && pins[i].longitude == p.longitude )
 					addedPin = true
 					pins[i] = p
-					Log.debug("Added pin at #{p.latitude} #{p.longitude}")
+					Log.debug("Updated pin at #{p.latitude} #{p.longitude}")
 				end
 			end
 			if( !addedPin )
 				pins.push(p)
+				Log.debug("Added pin at #{p.latitude} #{p.longitude}")
 			end
 			f.rewind
 			f.truncate(f.pos)
@@ -203,6 +216,37 @@ module Map
 		savePin(p)
 		Scores.addCamera(username)
 		return true # Added a new pin!
+	end
+
+	# Searches for pins near the desired location, asks them
+	# to unverify the given username. Stops after one success.
+	# Returns true if unverification complete, returns false
+	# if no appropriate pins found.
+	def self.unverifyPin(lat, lon, username)
+		f = File.open(Configuration::PinDir + "/" + getZoneFile(lat, lon), "r+")
+		Log.debug("Unverifying a pin...")
+		f.flock(File::LOCK_EX)
+		Log.debug("Unverification lock acquired")
+		pins = Marshal.load(Zlib::Inflate.inflate(f.read))
+		for p in pins
+			distance = Location.getDistance(p.latitude, p.longitude, lat, lon)
+			if( distance < Configuration::PinOverlapRadius )
+				Log.debug("Attempting unverification...")
+				success = p.unverify(username)
+				Log.debug("Unverification success: #{success.to_s}")
+				if( success ) # Great, need to re-save the pins now
+					Log.debug("Resaving pins post unverify...")
+					pins.delete_if{ |p| p.verifies == 0 }
+					f.seek(0)
+					f.truncate(f.pos)
+					f.write(Zlib::Deflate.deflate(Marshal.dump(pins)))
+					f.close()
+					return true # Found an appropriate pin / username combo
+				end
+			end
+		end
+		f.close()
+		return false # Either couldn't find a pin, or wrong username
 	end
 
 	# Triggers a removal of all old pins

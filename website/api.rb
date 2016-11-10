@@ -78,3 +78,28 @@ post '/markPin' do
 		return "ERROR: Invalid login\n"
 	end
 end
+
+# Gathers username and coordinates, attempts to remove verifications by
+# that user for the specified pin.
+post '/unmarkPin' do
+	username = params['username']
+	longitude = params['longitude'].to_f
+	latitude = params['latitude'].to_f
+	unless( Location.ipInRange?(request.ip, latitude, longitude) )
+		return "ERROR: Geoip out of range\n"
+	end
+	if( Auth.validLogin?(username) )
+		if( RateLimit.rateExceeded?(request.ip) )
+			return "ERROR: Rate limit exceeded\n"
+		else
+			RateLimit.addRecord(request.ip)
+			if( Map.unverifyPin(latitude, longitude, username) )
+				return "SUCCESS: Pin verification revoked\n"
+			else
+				return "ERROR: Permission denied\n"
+			end
+		end
+	else
+		return "ERROR: Permission denied\n"
+	end
+end

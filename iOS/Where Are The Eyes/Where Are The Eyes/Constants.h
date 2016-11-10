@@ -15,6 +15,9 @@
 #define kUsernameString @"username_preference"
 #define kConfirmMarkingCameras @"confirm_marking_cameras"
 #define kShowScore @"show_score"
+#define kMapboxMetrics @"MGLMapboxMetricsEnabled"
+#define kTransparentMarkers @"transparent_markers"
+#define kSatelliteMap @"use_satellite_map"
 
 #define kPostTimeout 20.0
 #define kTimeoutAfterPosting 1.0f

@@ -14,17 +14,18 @@ import com.mapbox.mapboxsdk.maps.MapView;
 
 /**
  * Created by milo on 3/5/16.
+ *
+ * This class is responsible for handling location updates, and kicking off background threads
+ * to download more pins.
  */
 public class GPS implements LocationListener {
     private Location position = null;
     private Date lastKnown = null;
     private Boolean enabled = true;
     private MapView map = null;
-    private HashMap<LatLng, Integer> pins = null;
 
     public GPS(MapView m) {
         super();
-        pins = new HashMap<LatLng, Integer>();
         map = m;
         Log.d("GPS", "Initialized");
     }
@@ -34,7 +35,7 @@ public class GPS implements LocationListener {
         if( position == null || lastKnown == null ) {
             position = loc;
             lastKnown = new Date();
-            new DownloadPinsTask().execute(new PinData(pins, map, position));
+            new DownloadPinsTask().execute(new PinData(new HashMap<LatLng, Integer>(), map, position));
             return;
         }
 
@@ -47,14 +48,14 @@ public class GPS implements LocationListener {
         position = loc;
 
         // Don't constantly re-download pins if we're standing still
-        // If we're walking over 5 meters, or it's been 30 seconds, then okay
+        // If we're walking over X meters, or it's been 30 seconds, then okay
         if( distance > Constants.MIN_DISTANCE_FOR_PIN_REDOWNLOAD || diff > Constants.MIN_TIME_FOR_PIN_REDOWNLOAD ) {
             Log.d("GPS", "PING! Triggering pin re-download. "
                     + "Distance: "
                     + Float.toString(distance)
                     + " Time diff: "
                     +  Long.toString(diff));
-            new DownloadPinsTask().execute(new PinData(pins, map, position));
+            new DownloadPinsTask().execute(new PinData(new HashMap<LatLng, Integer>(), map, position));
         } else {
             Log.d("GPS", "PING! No re-download needed. "
                     + "Distance: "
@@ -66,7 +67,7 @@ public class GPS implements LocationListener {
 
     // Redownload pins even if location hasn't changed.
     public void refreshPins() {
-        new DownloadPinsTask().execute(new PinData(pins, map, position));
+        new DownloadPinsTask().execute(new PinData(new HashMap<LatLng, Integer>(), map, position));
     }
 
     @Override

@@ -27,9 +27,9 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * Created by milo on 3/6/16.
  *
- * This code runs on a background thread, and sends a network request to mark a new camera.
+ * This code runs on a background thread, and sends a network request to unmark an existing camera.
  */
-public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
+public class UnmarkPin extends AsyncTask<MarkData, Void, Void> {
 
     @Override
     protected Void doInBackground(MarkData... params) {
@@ -40,7 +40,7 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
         if( username.length() == 0 )
             return null;
         if( l == null ) {
-            Log.d("Marking", "Location was null!");
+            Log.d("Unmarking", "Location was null!");
             return null; // Location data isn't available yet!
         }
         try {
@@ -52,7 +52,7 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
             // Vibrate once, let the user know we received the button tap
             Vibrate.pulse(context);
 
-            URL url = new URL("https://" + Constants.DOMAIN + "/markPin");
+            URL url = new URL("https://" + Constants.DOMAIN + "/unmarkPin");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             try {
 
@@ -82,14 +82,15 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
 
                 handleResponse(response, context, activity);
 
-                Log.d("Marking", "Marked new pin, got response: " + response);
+                Log.d("Unmarking", "Unmarked pin, got response: " + response);
             } finally {
                 conn.disconnect();
             }
         } catch( Exception e ) {
-            Log.e("MarkPin", "Error marking pin: " + e.getMessage());
-            Log.e("MarkPin", Log.getStackTraceString(e));
+            Log.e("UnmarkPin", "Error unmarking pin: " + e.getMessage());
+            Log.e("UnmarkPin", Log.getStackTraceString(e));
         }
+
         return null;
     }
 
@@ -117,12 +118,12 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
     // Creates the appropriate error message if necessary
     private void handleResponse(String response, final Context context, final Activity activity) {
         if(response.equals("ERROR: Invalid login")) {
-            Log.d("MarkPin", "Parsed as 'invalid username'");
+            Log.d("UnmarkPin", "Parsed as 'invalid username'");
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
-                    builder.setTitle(R.string.marking_failed_title)
+                    builder.setTitle(R.string.unmarking_failed_title)
                             .setMessage(R.string.username_invalid)
                             .setCancelable(false)
                             .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
@@ -141,12 +142,12 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
                 }
             });
         } else if(response.equals("ERROR: Geoip out of range")) {
-            Log.d("MarkPin", "Parsed as 'geoip error'");
+            Log.d("UnmarkPin", "Parsed as 'geoip error'");
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
-                    builder.setTitle(R.string.marking_failed_title)
+                    builder.setTitle(R.string.unmarking_failed_title)
                             .setMessage(R.string.geoip_failed)
                             .setCancelable(false)
                             .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
@@ -159,12 +160,12 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
                 }
             });
         } else if(response.equals("ERROR: Rate limit exceeded")) {
-            Log.d("MarkPin", "Parsed as 'ratelimit error'");
+            Log.d("UnmarkPin", "Parsed as 'ratelimit error'");
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
-                    builder.setTitle(R.string.marking_failed_title)
+                    builder.setTitle(R.string.unmarking_failed_title)
                             .setMessage(R.string.ratelimit_failed)
                             .setCancelable(false)
                             .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
@@ -176,8 +177,26 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
                     errorMarking.show();
                 }
             });
+        } else if(response.equals("ERROR: Permission denied")) {
+            Log.d("UnmarkPin", "Parsed as 'permission denied'");
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
+                    builder.setTitle(R.string.unmarking_failed_title)
+                            .setMessage(R.string.unmarking_permission_denied)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog errorMarking = builder.create();
+                    errorMarking.show();
+                }
+            });
         } else if(response.startsWith("ERROR:")) {
-            Log.d("MarkPin", "Parsed as 'other error'");
+            Log.d("UnmarkPin", "Parsed as 'other error'");
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -195,7 +214,7 @@ public class MarkOrVerifyPin extends AsyncTask<MarkData, Void, Void> {
                 }
             });
         } else {
-            Log.d("MarkPin", "Parsed as 'marking succeeded'");
+            Log.d("UnmarkPin", "Parsed as 'unmarking succeeded'");
         }
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="40sp"
+        android:id="@+id/infobox"
+        android:background="@android:color/background_light">
+
+        <TextView
+            android:id="@+id/tooltip_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:maxEms="17"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="Confirmations: "/>
+
+        <ImageButton
+            android:id="@+id/marker_info"
+            android:background="@drawable/info"
+            android:onClick="getInfo"
+            android:layout_width="18sp"
+            android:layout_height="18sp"
+            android:layout_toEndOf="@+id/tooltip_title"
+            android:layout_toRightOf="@+id/tooltip_title"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp" />
+
+    </RelativeLayout>
+
+
+    <com.mapbox.mapboxsdk.annotations.InfoWindowTipView
+        android:layout_width="32dp"
+        android:layout_height="10dp"
+        android:layout_centerVertical="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/infobox"/>
+</RelativeLayout>

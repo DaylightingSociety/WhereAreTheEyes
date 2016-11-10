@@ -1,0 +1,11 @@
+/* A single strings file, whose title is specified in your preferences schema. The strings files provide the localized content to display to the user for each of your preferences. */
+
+"Group" = "Group";
+"Name" = "Name";
+"none given" = "none given";
+"Enabled" = "Enabled";
+"Please register a username at eyes.daylightingsociety.org and enter it below" = "Por favor, escolha um  nome de usuário em eyes.daylightingsociety.org e insira-o abaixo.";
+"Username" = "Nome de usuario";
+"UI Options" = "Opções de interface de usuário";
+"Confirm marking cameras" = "Confirmar pinos";
+"Show score" = "Mostrar pontuação";

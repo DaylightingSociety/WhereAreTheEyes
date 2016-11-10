@@ -20,6 +20,11 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by milo on 7/20/16.
+ *
+ * This code is responsible for making network requests to load our score,
+ * caching the results, and returning scores when asked for.
+ *
+ * It caches the username so that we can invalidate our cache if the username changes.
  */
 public class Score {
     private SharedPreferences preferences;
@@ -77,6 +82,7 @@ public class Score {
         return verifications;
     }
 
+    // This runs a little task in the background for downloading scores
     public void updateScore(final String username) {
         if( username.length() == 0 ) {
             cameras_marked = 0;
@@ -115,6 +121,7 @@ public class Score {
         });
     }
 
+    // This is run on a background thread inside the above AsyncTask
     private void parseDownload(String data) {
         Log.d("Score", "Downloaded score data: " + data);
 

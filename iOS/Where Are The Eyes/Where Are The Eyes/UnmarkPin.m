@@ -1,27 +1,26 @@
 //
-//  MarkPin.m
+//  UnmarkPin.m
 //  Where Are The Eyes
 //
-//  Created by Milo Trujillo on 6/2/16.
+//  Created by Milo Trujillo on 10/31/16.
 //  Copyright © 2016 Daylighting Society. All rights reserved.
 //
 
-@import UIKit;
 #import <Foundation/Foundation.h>
-#import "MarkPin.h"
+#import "UnmarkPin.h"
 #import "Constants.h"
 #import "Vibrate.h"
 
-@implementation MarkPin
+@implementation UnmarkPin
 
-+ (id)markPinAt:(Coord*)c withUsername:(NSString*)username
++ (id)unmarkPinAt:(Coord*)c withUsername:(NSString*)username
 {
-	NSLog(@"Marking pin at lat:%f lon:%f with username %@", c.latitude, c.longitude, username);
-	[Vibrate pulse]; // Let the user know their mark request has been noticed
+	NSLog(@"Unmarking pin at lat:%f lon:%f with username %@", c.latitude, c.longitude, username);
+	[Vibrate pulse]; // Let the user know their unmark request has been noticed
 	
 	// Set the URL and create an HTTP request
-	NSString* markUrl = [kEyesURL stringByAppendingString:@"/markPin"];
-	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:markUrl]];
+	NSString* unmarkUrl = [kEyesURL stringByAppendingString:@"/unmarkPin"];
+	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:unmarkUrl]];
 	
 	// Specify that it will be a POST request
 	[request setHTTPMethod:@"POST"];
@@ -43,7 +42,7 @@
 	NSData* returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 	NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
 	
-	NSLog(@"Response from marking pin: %@", response);
+	NSLog(@"Response from unmarking pin: %@", response);
 	[self parseResponse:response];
 	
 	return nil;
@@ -59,8 +58,12 @@
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"CameraOutOfRange" object:self];
 	else if( [response isEqualToString:@"ERROR: Rate limit exceeded\n"] )
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"RateLimitError" object:self];
+	else if( [response isEqualToString:@"ERROR: Permission denied\n"] )
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"PermissionDeniedUnmarkingCamera" object:self];
 	else if( [response hasPrefix:@"ERROR:"] )
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorMarkingCamera" object:self];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorUnmarkingCamera" object:self];
+	else
+		NSLog(@"I got an unmark pin response I don't understand: %@", response);
 }
 
 @end

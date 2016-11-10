@@ -1,0 +1,21 @@
+/* 
+  Localizable.strings
+  Where Are The Eyes
+
+  Created by Milo Trujillo on 9/23/16.
+  Copyright © 2016 Daylighting Society. All rights reserved.
+*/
+"Confirm" = "Confirm";
+"Mark a camera at this location?" = "Mark a camera at this location?";
+"No" = "No";
+"Yes" = "Yes";
+"Okay" = "Okay";
+"Register" = "Register";
+"Dismiss" = "Dismiss";
+"Your IP address and physical location do not match. To protect the integrity of the map we cannot allow you to mark pins with a proxy." = "Your IP address and physical location do not match. To protect the integrity of the map we cannot allow you to mark pins with a proxy.";
+"Marking camera failed" = "Marking camera failed";
+"Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?" = "Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?";
+"Unknown error, or server unreachable." = "Unknown error, or server unreachable.";
+"No username set" = "No username set";
+"Please register a username online and set it in Settings" = "Please register a username online and set it in Settings";
+"You are marking pins too quickly. To protect the integrity of the map we cannot allow you to mark cameras for a while." = "You are marking pins too quickly. To protect the integrity of the map we cannot allow you to mark cameras for a while.";

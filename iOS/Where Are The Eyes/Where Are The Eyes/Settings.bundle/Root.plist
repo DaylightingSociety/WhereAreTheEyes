@@ -10,7 +10,9 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>Please register a username at eyes.daylightingsociety.org and enter it below</string>
+			<string>Account Options</string>
+			<key>FooterText</key>
+			<string>Please register a username at eyes.daylightingsociety.org and enter it above</string>
 		</dict>
 		<dict>
 			<key>Type</key>
@@ -46,16 +48,44 @@
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
-        <dict>
-            <key>Type</key>
-            <string>PSToggleSwitchSpecifier</string>
-            <key>Title</key>
-            <string>Show score</string>
-            <key>Key</key>
-            <string>show_score</string>
-            <key>DefaultValue</key>
-            <true/>
-        </dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Show score</string>
+			<key>Key</key>
+			<string>show_score</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Use satellite map</string>
+			<key>Key</key>
+			<string>use_satellite_map</string>
+			<key>DefaultValue</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Privacy Settings</string>
+			<key>FooterText</key>
+			<string>This setting allows the application to share anonymized location and usage data with Mapbox. We are required to enable metrics by default.</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Mapbox Metrics</string>
+			<key>Key</key>
+			<string>MGLMapboxMetricsEnabled</string>
+			<key>DefaultValue</key>
+			<true/>
+		</dict>
 	</array>
 </dict>
 </plist>

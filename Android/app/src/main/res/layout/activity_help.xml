@@ -23,8 +23,12 @@
         android:text="@string/help_text"
         android:id="@+id/textView2"
         android:layout_gravity="center_horizontal"
-        android:autoLink="web"
+        android:autoLink="web|email"
         android:linksClickable="true"
-        android:textColorLink="#43ABC9" />
+        android:textColorLink="#43ABC9"
+        android:contextClickable="false"
+        android:focusable="false"
+        android:clickable="false"
+        android:editable="false" />
 
 </android.support.percent.PercentRelativeLayout>

@@ -49,6 +49,8 @@
 
 - (void)updateMap:(NSArray*)pins
 {
+	// Remove old pins in case they've been purged
+	[_map removeAnnotations:[_map annotations]];
 	for( Coord* pin in pins)
 	{
 		@try {

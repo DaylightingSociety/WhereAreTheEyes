@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "Constants.h"
 #import "MarkPin.h"
+#import "UnmarkPin.h"
 #import "Score.h"
 @import Mapbox;
 
@@ -34,8 +35,12 @@
 	[self.map setCenterCoordinate:CLLocationCoordinate2DMake(59.31, 18.06)
 						zoomLevel:9
 						 animated:NO];
+	
+	// Hide attribution, we'll handle attribution, copyright, and analytics opt-out ourselves
+	[[self.map attributionButton] setHidden:YES];
+	[[self.map logoView] setHidden:YES];
+	
 	[self.map setDelegate:self];
-	//[self.map setStyleURL:styleURL];
 	gps = [[GPS alloc] init:self.map];
 	scores = [[Score alloc] init];
 	
@@ -59,8 +64,23 @@
 											   object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(displayRateLimitErrorAlert:)
+												 name:@"RateLimitError"
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(displayUnmarkingPermissionDeniedAlert:)
+												 name:@"PermissionDeniedUnmarkingCamera"
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(displayMarkingErrorAlert:)
 												 name:@"ErrorMarkingCamera"
+											   object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(displayUnmarkingErrorAlert:)
+												 name:@"ErrorUnmarkingCamera"
 											   object:nil];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -83,6 +103,12 @@
 	[super viewDidAppear:animated];
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	[self redrawScores:orientation];
+	
+	BOOL satelliteMap = [[NSUserDefaults standardUserDefaults] boolForKey:kSatelliteMap];
+	if( satelliteMap )
+		[self.map setStyleURL:[MGLStyle satelliteStreetsStyleURLWithVersion:9]];
+	else
+		[self.map setStyleURL:[MGLStyle streetsStyleURLWithVersion:9]];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -132,10 +158,17 @@
 // This is part of being a MapView delegate, and would return a custom image
 // for pins if we wanted.
 - (MGLAnnotationImage*)mapView:(MGLMapView*)mapView imageForAnnotation:(id<MGLAnnotation>)annotation {
-	MGLAnnotationImage* pinImage = [mapView dequeueReusableAnnotationImageWithIdentifier:@"map_pin"];
+	BOOL transparentPins = [[NSUserDefaults standardUserDefaults] boolForKey:kTransparentMarkers];
+	
+	// Get the correct pin image based on settings
+	NSString* pinName = @"map_pin";
+	if( transparentPins )
+		pinName = @"map_pin_transparent";
+	
+	MGLAnnotationImage* pinImage = [mapView dequeueReusableAnnotationImageWithIdentifier:pinName];
 	if( !pinImage )
 	{
-		UIImage* img = [UIImage imageNamed:@"map_pin"];
+		UIImage* img = [UIImage imageNamed:pinName];
 		
 		// Usually images have the lower half transparency, to make sure the pin tip is
 		// the center anchor-point of the image. However, we don't want the transparancy to be "clickable"
@@ -143,7 +176,7 @@
 		img = [img imageWithAlignmentRectInsets:UIEdgeInsetsMake(0, 0, img.size.height/2, 0)];
 		
 		// Initialize the pinImage with the image we just loaded
-		pinImage = [MGLAnnotationImage annotationImageWithImage:img reuseIdentifier:@"map_pin"];
+		pinImage = [MGLAnnotationImage annotationImageWithImage:img reuseIdentifier:pinName];
 	}
 	return pinImage;
 }
@@ -151,6 +184,49 @@
 // Enable displaying pin annotations when they are tapped on.
 - (BOOL)mapView:(MGLMapView*)mapView annotationCanShowCallout:(id<MGLAnnotation>)annotation {
 	return YES;
+}
+
+
+- (UIView *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id<MGLAnnotation>)annotation
+{
+	return [UIButton buttonWithType:UIButtonTypeInfoDark];
+}
+
+- (void)mapView:(MGLMapView *)mapView annotation:(id<MGLAnnotation>)annotation calloutAccessoryControlTapped:(UIControl *)control
+{
+	// Hide the callout view.
+	[self.map deselectAnnotation:annotation animated:NO];
+	
+	UIAlertController* alert = [UIAlertController
+								alertControllerWithTitle:annotation.title
+								message:@"This is a camera"
+								preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction* close = [UIAlertAction
+							actionWithTitle:@"Dismiss"
+							style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+								// Don't need to do anything, default is close the window
+							}];
+	
+	UIAlertAction* remove = [UIAlertAction
+							actionWithTitle:@"Remove"
+							style:UIAlertActionStyleDestructive
+							handler:^(UIAlertAction * _Nonnull action) {
+								CLLocationCoordinate2D c2d = [annotation coordinate];
+								Coord* c = [[Coord alloc] initLatitude:c2d.latitude longitude:c2d.longitude confirmations:0];
+								dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+									[UnmarkPin unmarkPinAt:c withUsername:[self getUsername]];
+									[NSThread sleepForTimeInterval:kTimeoutAfterPosting];
+									[gps forcePinUpdate];
+									if( [scores scoresEnabled] )
+										[scores updateScores:self.getUsername];
+								});
+							}];
+
+	[alert addAction:close];
+	[alert addAction:remove];
+	
+	[self presentViewController:alert animated:YES completion:nil];
 }
 
 // Opens the iOS settings pane for our app
@@ -206,15 +282,15 @@
 	// Present a confirmation if asked for, otherwise just go for it and mark the pin.
 	if( confirmation_enabled )
 	{
-		UIAlertController* confirm = [UIAlertController alertControllerWithTitle:@"Confirm"
-																		 message:@"Mark a camera at this location?"
+		UIAlertController* confirm = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm", nil)
+																		 message:NSLocalizedString(@"Mark a camera at this location?", nil)
 																  preferredStyle:UIAlertControllerStyleAlert];
 		
-		UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"No"
+		UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
 														 style:UIAlertActionStyleCancel
 													   handler:^(UIAlertAction* action) {}];
 		
-		UIAlertAction* mark = [UIAlertAction actionWithTitle:@"Yes"
+		UIAlertAction* mark = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
 																   style:UIAlertActionStyleDefault
 																 handler:^(UIAlertAction* action) {
 																	 [self markPin];
@@ -247,15 +323,15 @@
 
 // Displays an error if the username was rejected by server when marking a pin
 - (void)displayInvalidUserAlert:(NSNotification*) notification {
-	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Marking camera failed"
-																   message:@"Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?"
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Marking camera failed", nil)
+																   message:NSLocalizedString(@"Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Okay"
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
 													 style:UIAlertActionStyleCancel
 												   handler:^(UIAlertAction* action) {}];
 	
-	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:@"Register"
+	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:NSLocalizedString(@"Register", nil)
 															   style:UIAlertActionStyleDefault
 															 handler:^(UIAlertAction* action) {
 																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL]];
@@ -271,11 +347,11 @@
 // It probably means they're using a proxy, but could also mean they're spoofing their
 // location with dev tools.
 - (void)displayCameraOutOfRangeAlert:(NSNotification*) notification {
-	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Marking camera failed"
-																   message:@"Your IP address and physical location do not match. To protect the integrity of the map we cannot allow you to mark pins with a proxy."
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Marking camera failed", nil)
+																   message:NSLocalizedString(@"Your IP address and physical location do not match. To protect the integrity of the map we cannot allow you to mark pins with a proxy.", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 
-	UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Okay"
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
 													 style:UIAlertActionStyleCancel
 												   handler:^(UIAlertAction* action) {}];
 
@@ -284,13 +360,58 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
-// Displays any generic error received when marking pins. Mostly exists as a future-proof for undefined errors.
-- (void)displayMarkingErrorAlert:(NSNotification*) notification {
-	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Marking camera failed"
-																   message:@"Unknown error, or server unreachable."
+// Displays errors related to server rate limiting
+- (void)displayRateLimitErrorAlert:(NSNotification*) notification {
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Marking camera failed", nil)
+																   message:NSLocalizedString(@"You are marking pins too quickly. To protect the integrity of the map we cannot allow you to mark cameras for a while.", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Okay"
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
+													 style:UIAlertActionStyleCancel
+												   handler:^(UIAlertAction* action) {}];
+	
+	
+	[alert addAction:cancel];
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+// Displays any generic error received when marking pins. Mostly exists as a future-proof for undefined errors.
+- (void)displayUnmarkingPermissionDeniedAlert:(NSNotification*) notification {
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Unmarking camera failed", nil)
+																   message:NSLocalizedString(@"You do not have permission to remove this camera.", nil)
+															preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
+													 style:UIAlertActionStyleCancel
+												   handler:^(UIAlertAction* action) {}];
+	
+	
+	[alert addAction:cancel];
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+// Displays any generic error received when marking pins. Mostly exists as a future-proof for undefined errors.
+- (void)displayMarkingErrorAlert:(NSNotification*) notification {
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Marking camera failed", nil)
+																   message:NSLocalizedString(@"Unknown error, or server unreachable.", nil)
+															preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
+													 style:UIAlertActionStyleCancel
+												   handler:^(UIAlertAction* action) {}];
+	
+	
+	[alert addAction:cancel];
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+// Displays any generic error received when marking pins. Mostly exists as a future-proof for undefined errors.
+- (void)displayUnmarkingErrorAlert:(NSNotification*) notification {
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Unmarking camera failed", nil)
+																   message:NSLocalizedString(@"Unknown error, or server unreachable.", nil)
+															preferredStyle:UIAlertControllerStyleAlert];
+	
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
 													 style:UIAlertActionStyleCancel
 												   handler:^(UIAlertAction* action) {}];
 	
@@ -315,15 +436,15 @@
 
 - (void)displayNoUsernameAlert
 {
-	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No username set"
-																   message:@"Please register a username online and set it in Settings"
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No username set", nil)
+																   message:NSLocalizedString(@"Please register a username online and set it in Settings", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancel = [UIAlertAction actionWithTitle:@"Dismiss"
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil)
 													 style:UIAlertActionStyleCancel
 												   handler:^(UIAlertAction* action) {}];
 	
-	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:@"Register"
+	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:NSLocalizedString(@"Register", nil)
 															   style:UIAlertActionStyleDefault
 															 handler:^(UIAlertAction* action) {
 																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL]];

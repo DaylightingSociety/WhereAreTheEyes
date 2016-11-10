@@ -1,6 +1,7 @@
 package org.daylightingsociety.wherearetheeyes;
 
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -8,8 +9,13 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
 
+import com.mapbox.mapboxsdk.telemetry.MapboxEventManager;
+
 /**
  * Created by milo on 4/2/16.
+ *
+ * This file sets up some handlers so we can trigger events when the user changes settings.
+ *
  */
 public class SettingsActivity extends PreferenceActivity {
     @Override
@@ -18,6 +24,7 @@ public class SettingsActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
 
         final EditTextPreference username = (EditTextPreference) getPreferenceManager().findPreference("username_preference");
+        final CheckBoxPreference mapboxanalytics = (CheckBoxPreference) getPreferenceManager().findPreference("mapbox_analytics");
 
         // Set the title to include the username if there is one
         if( username.getText().length() > 0 )
@@ -46,6 +53,16 @@ public class SettingsActivity extends PreferenceActivity {
                 else
                     preference.setTitle("Username");
                 Log.d("PREFERENCES", "Updated username to: " + newValue.toString());
+                return true; // Returning true commits the change
+            }
+        });
+
+        mapboxanalytics.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MapboxEventManager.getMapboxEventManager().setTelemetryEnabled((Boolean)newValue);
+                Boolean nowSet = MapboxEventManager.getMapboxEventManager().isTelemetryEnabled();
+                Log.d("PREFERENCES", "Updated mapbox analytics to: " + nowSet.toString());
                 return true; // Returning true commits the change
             }
         });

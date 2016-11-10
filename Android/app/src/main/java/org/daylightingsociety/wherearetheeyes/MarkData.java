@@ -6,6 +6,8 @@ import android.location.Location;
 
 /**
  * Created by milo on 4/2/16.
+ *
+ * This is a blob so we can pass location data to background threads for marking pins
  */
 public class MarkData {
     public String username;

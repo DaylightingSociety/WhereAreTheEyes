@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "Constants.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,18 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	// Setting 'Default Value' in the Settings.bundle is purely cosmetic, we have to set the default
+	// values *here* for them to have any effect. Note that enabling Mapbox metrics by default is required
+	// by their terms of service.
+	NSDictionary *userDefaultsDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+										  [NSNumber numberWithBool:YES], kConfirmMarkingCameras,
+										  [NSNumber numberWithBool:NO], kShowScore,
+										  [NSNumber numberWithBool:YES], kMapboxMetrics,
+										  [NSNumber numberWithBool:NO], kTransparentMarkers,
+										  [NSNumber numberWithBool:NO], kSatelliteMap,
+										  nil];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsDefaults];
+	[[NSUserDefaults standardUserDefaults] synchronize];
     // Override point for customization after application launch.
     return YES;
 }

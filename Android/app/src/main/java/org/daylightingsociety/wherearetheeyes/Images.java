@@ -9,8 +9,13 @@ import com.mapbox.mapboxsdk.annotations.IconFactory;
 
 /**
  * Created by milo on 8/31/16.
+ *
+ * This object caches the image data for each of our camera pins, and making it easy to access
+ * the image resources in a format MapBox will understand.
  */
 public class Images {
+    private static Icon cameraIcon = null;
+
     private Images() {
 
     }
@@ -19,10 +24,12 @@ public class Images {
         mainContext = c;
     }
 
-    public static Icon getCameraIcon() {
+    public static final Icon getCameraIcon() {
+        if( cameraIcon != null )
+            return cameraIcon;
         IconFactory iconFactory = IconFactory.getInstance(mainContext);
         Drawable iconDrawable = ContextCompat.getDrawable(mainContext, R.drawable.map_pin);
-        Icon cameraIcon = iconFactory.fromDrawable(iconDrawable);
+        cameraIcon = iconFactory.fromDrawable(iconDrawable);
         return cameraIcon;
     }
 

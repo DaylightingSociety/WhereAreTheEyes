@@ -14,12 +14,16 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.location.*;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.constants.Style;
@@ -78,15 +82,31 @@ public class MainActivity extends Activity {
             gps.onLocationChanged(l);
 
         // Configure our access token and tileset for the mapView
+        // In the future MapboxAccountManager will be necessary, but for now only setAccessToken
+        // seems to work, so we'll just use them both.
+        MapboxAccountManager.start(this, Constants.APIKEY);
         mapView.setAccessToken(Constants.APIKEY);
-        mapView.setStyleUrl(Style.MAPBOX_STREETS); // Won't display on screen without this
 
-        // This whole mess is to autozoom on our location at startup
+        // Set whatever style the user prefers
+        if( satelliteMapEnabled() )
+            mapView.setStyle(Style.SATELLITE_STREETS);
+        else
+            mapView.setStyleUrl(Style.MAPBOX_STREETS);
+
+        // This block does some initialization for the map, instead of the mapview
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+                // Callback to an empty function on FPS changes
                 mapboxMap.setOnFpsChangedListener(new EyesOnFPSChangedListener());
-                mapboxMap.setMyLocationEnabled(true); // Put a little marker on our position
+
+                // Put a little blue marker on our position
+                mapboxMap.setMyLocationEnabled(true);
+
+                // Set a callback to create our custom info window when a marker is tapped
+                mapboxMap.setInfoWindowAdapter(getInfoWindowHandler());
+
+                // This whole mess is to get the map to autoscroll to the user's location on start
                 Location l = null;
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 boolean netEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -107,8 +127,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        mapView.onCreate(savedInstanceState); // Note: Access token MUST be set before this line
+
+        // Set up the image cache for pins
         Images.init(this);
+
+        // This finally creates the map.
+        // Note: Access token MUST be set before this line
+        mapView.onCreate(savedInstanceState);
 
         if( score.scoresEnabled(getUsername()) ) {
             drawScores();
@@ -116,6 +141,54 @@ public class MainActivity extends Activity {
         } else {
             scorebar.setVisibility(View.INVISIBLE);
         }
+    }
+
+    // This returns a codeblock to make the little info windows for pins
+    // It's in an isolated function because it's a mess and I want to contain it.
+    public MapboxMap.InfoWindowAdapter getInfoWindowHandler() {
+        return new MapboxMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(final Marker marker) {
+                View infoWindow = LayoutInflater.from(MainActivity.this).inflate(R.layout.pin_infobox, null);
+                ImageButton info = (ImageButton) infoWindow.findViewById(R.id.marker_info);
+                TextView title = (TextView) infoWindow.findViewById(R.id.tooltip_title);
+                final LatLng coord = marker.getPosition();
+                final Location loc = new Location("");
+                loc.setLatitude(coord.getLatitude());
+                loc.setLongitude(coord.getLongitude());
+                title.setText(marker.getTitle());
+
+                // When info button is pressed, pop up a dialog for removal.
+                info.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK);
+                        builder.setTitle(marker.getTitle())
+                                .setMessage(R.string.this_is_a_camera)
+                                .setCancelable(false)
+                                .setNegativeButton(R.string.dismiss, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setPositiveButton(R.string.remove, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        String username = getUsername();
+                                        if( username.length() == 0 ) {
+                                            alertNoUsername();
+                                        } else {
+                                            new UnmarkPin().execute(new MarkData(username, loc, MainActivity.this, MainActivity.this));
+                                            gps.refreshPins();
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog removePin = builder.create();
+                        removePin.show();
+                    }
+                });
+                return infoWindow;
+            }
+        };
     }
 
     // Draws the scorebar if we have a valid username, hides it otherwise
@@ -134,6 +207,12 @@ public class MainActivity extends Activity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final String username = prefs.getString("username_preference", "");
         return username;
+    }
+
+    public Boolean satelliteMapEnabled() {
+        Context context = MainActivity.this;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("use_satellite_map", false);
     }
 
     // Centers the map over the last known user location
@@ -162,6 +241,25 @@ public class MainActivity extends Activity {
         });
     }
 
+    public void alertNoUsername() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, AlertDialog.THEME_HOLO_DARK);
+        builder.setMessage(R.string.no_username_alert)
+                .setCancelable(false)
+                .setNegativeButton(R.string.okay, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + Constants.REGISTER_URL));
+                        startActivity(browserIntent);
+                    }
+                });
+        AlertDialog noUsername = builder.create();
+        noUsername.show();
+    }
+
     // This is called when the eye button is pressed. It does all the config validation before
     // we actually go make a network request.
     public void markOrVerifyCamera(View view) {
@@ -173,22 +271,7 @@ public class MainActivity extends Activity {
 
         // No username is set yet, make the users go set one.
         if (username.length() == 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setMessage(R.string.no_username_alert)
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.okay, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
-                    })
-                    .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://" + Constants.REGISTER_URL));
-                            startActivity(browserIntent);
-                        }
-                    });
-            AlertDialog noUsername = builder.create();
-            noUsername.show();
+            alertNoUsername();
             return;
         }
 
@@ -197,7 +280,7 @@ public class MainActivity extends Activity {
 
         // Put up the dialog to confirm marking pins
         if (confirmMarking) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, AlertDialog.THEME_HOLO_DARK);
             builder.setTitle(R.string.confirm)
                     .setMessage(R.string.mark_camera_confirmation)
                     .setCancelable(false)
@@ -219,6 +302,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    // This is called once we have validated our config and know we want to mark a pin
     public void commitMarkingCamera(String username)
     {
         Log.d("CAMERA_BUTTON", "Marking with username: " + username);
@@ -291,7 +375,7 @@ public class MainActivity extends Activity {
                         the button click handlers. This is because the dialog is created
                         asynchronously, so we can't just put the if statement down below.
                      */
-                    AlertDialog.Builder needPerms = new AlertDialog.Builder(this);
+                    AlertDialog.Builder needPerms = new AlertDialog.Builder(this, AlertDialog.THEME_HOLO_DARK);
                     needPerms.setMessage(R.string.needs_location_explanation);
                     needPerms.setCancelable(false);
                     needPerms.setPositiveButton(
@@ -349,6 +433,16 @@ public class MainActivity extends Activity {
         } else {
             scorebar.setVisibility(View.INVISIBLE);
         }
+
+        // Set the correct style if it's changed in preferences
+        // We do this in onResume() so when we return from the Settings activity we'll immediately
+        // load the new style.
+        String style = mapView.getStyleUrl();
+        if( satelliteMapEnabled() && style.equals(Style.MAPBOX_STREETS) )
+            mapView.setStyle(Style.SATELLITE_STREETS);
+        else if( !satelliteMapEnabled() && style.equals(Style.SATELLITE_STREETS) )
+            mapView.setStyle(Style.MAPBOX_STREETS);
+
     }
 
     @Override

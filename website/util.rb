@@ -11,7 +11,7 @@ require_relative 'configuration'
 # To sort posts numerically we need to get their number
 # This is everything up to the "_", converted to an int
 def getPostNumber(filename)
-	return filename[/^(.+)_/].to_i
+	return filename[/^(.+?)_/].to_i
 end
 
 def getMarkdown(filename)

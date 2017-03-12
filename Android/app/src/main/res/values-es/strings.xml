@@ -1,0 +1,34 @@
+<resources>
+	<string name="app_name">WhereAreTheEyes</string>
+	<string name="username_instructions">Por favor elegí un nombre de usuario en eyes.daylightingsociety.org e ingresalo debajo</string>
+	<string name="account_settings_description">Opciones de la cuenta</string>
+	<string name="ui_settings_description">Opciones de interfaz</string>
+	<string name="no_username_alert">Registrá un usuario online y cargalo en Configuracion</string>
+	<string name="needs_location_explanation">WhereAreTheEyes necesita acceso a tu ubicación para encontrar las cámaras cercanas. Dale permisos y reinicia la aplicación.</string>
+	<string name="view_permissions_button">Ver permisos</string>
+	<string name="marking_failed_title">Falló marcar la cámara</string>
+	<string name="unmarking_failed_title">Falló desmarcar la cámara</string>
+	<string name="username_invalid">El nombre de usuario no fue reconocido en eyes.daylightingsociety.org. ¿Está registrado?</string>
+	<string name="ratelimit_failed">Estás marcando muy rápido. Para proteger la integridad del mapa no te permitiremos agregar más cámaras por un tiempo.</string>
+	<string name="geoip_failed">Tu dirección IP y tu ubicación física no concuerdan. Para proteger la integridad del mapa no te permitiremos marcar más cámaras vía un proxy.</string>
+	<string name="unmarking_permission_denied">No tenés permiso de eliminar esta cámara.</string>
+	<string name="marking_failed">Error desconocido, o servidor inaccesible.</string>
+	<string name="confirm">Confirmar</string>
+	<string name="confirmations">Confirmaciones</string>
+	<string name="mark_camera_confirmation">¿Marcar una cámara en esta ubicación?</string>
+	<string name="yes">Si</string>
+	<string name="no">No</string>
+	<string name="okay">Ok</string>
+	<string name="dismiss">Descartar</string>
+	<string name="register">Registrar</string>
+	<string name="remove">Remover</string>
+	<string name="this_is_a_camera">Esta es una cámara</string>
+	<string name="help_title">Sobre "Where are the Eyes"</string>
+	<string name="confirm_pins_preference">Confirmar al hacer marcas</string>
+	<string name="show_score_preference">Ver puntaje</string>
+	<string name="use_satellite_map_preference">Usar mapa satelital</string>
+	<string name="privacy_settings_description">Opciones de privacidad</string>
+	<string name="mapbox_analytics_preference">Métricas de Mapbox</string>
+	<string name="mapbox_analytics_summary">Este ajuste le permite a la aplicación enviar las ubicaciones anonimizadas y el uso de datos con Mapbox. Estamos obligadas a habilitar las métricas por defecto</string>
+	<string name="help_text">Where are the eyes es una herramienta para detectar y evadir la vigilancia. Juntas, vos y otras usuarias construimos un mapa de las cámaras de vigilancia y protegemos a activistas, estudiantes y otras minorías en riesgo. Cuando veas una cámara presiona el botón del "ojo", con esto la agregamos al mapa, o verificamos si ya fue marcada.\n\nLas marcas rojas indican cámaras ya conocidas. El punto azul muestra tu ubicación. ¡Cuidate!.\n\n Todos los iconos de los botones son de Open Iconic y están con licencia MIT. El icono del "ojo" fue creado por Amanda Howanice para este proyecto.\n\nPodés encontrar mas información en eyes.daylightingsociety.org\n\n¿Comentarios? Escribinos a: eyes@daylightingsociety.org\n\nSe envían estadísticas anónimas a Mapbox por defecto - pero pueden desactivarse desde la configuración\n\nLos mapas son proporcionados por © Mapbox, © OpenStreetMap</string>
+</resources>

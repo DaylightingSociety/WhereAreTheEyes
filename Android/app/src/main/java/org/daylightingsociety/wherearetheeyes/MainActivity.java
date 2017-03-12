@@ -31,6 +31,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapzen.android.lost.api.LocationServices;
 
 public class MainActivity extends Activity {
     private static ImageButton camera = null;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
     private static TextView verificationScore = null;
     private static Score score = null;
     private static final int LOCATION_PERMS_REQUEST = 0;
+    private static LocationManager locationManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,13 @@ public class MainActivity extends Activity {
         acquireLocationPerms();
 
         // Set up the GPS to receive location updates
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         gps = new GPS(mapView);
         try {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, gps);
-            boolean netEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, gps);
+            boolean netEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (netEnabled)
-                l = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                l = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         } catch (SecurityException e) {
             // The user has already been alerted that we need permissions.
             // They'll just have to fix the problem.
@@ -449,6 +451,18 @@ public class MainActivity extends Activity {
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        if(locationManager != null) {
+            try {
+                locationManager.removeUpdates(gps);
+            } catch (SecurityException e) {
+                // The user has already been alerted that we need permissions.
+                // They'll just have to fix the problem.
+            }
+        }
     }
 
     @Override

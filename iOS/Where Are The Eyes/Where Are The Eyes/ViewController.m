@@ -327,7 +327,7 @@
 																   message:NSLocalizedString(@"Your username is not recognized at eyes.daylightingsociety.org. Is it registered on our website?", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 	
-	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Okay", nil)
+	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil)
 													 style:UIAlertActionStyleCancel
 												   handler:^(UIAlertAction* action) {}];
 	

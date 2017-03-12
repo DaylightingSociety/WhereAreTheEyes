@@ -27,8 +27,10 @@
         android:linksClickable="true"
         android:textColorLink="#43ABC9"
         android:contextClickable="false"
-        android:focusable="false"
         android:clickable="false"
+        android:longClickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:editable="false" />
 
 </android.support.percent.PercentRelativeLayout>

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">WhereAreTheEyes</string>
+    <string name="username_instructions">eyes.daylightingsociety.org でユーザー名を選択して、上に入力してください。</string>
+    <string name="account_settings_description">アカウント オプション</string>
+    <string name="ui_settings_description">UI オプション</string>
+    <string name="no_username_alert">オンラインでユーザー名を登録し、設定でセットしてください</string>
+    <string name="needs_location_explanation">WhereAreTheEyes は近くのカメラを見つけるために、場所にアクセスする必要があります。 このアクセス許可を付与して、アプリを再起動してください。</string>
+    <string name="view_permissions_button">アクセス許可を表示</string>
+    <string name="marking_failed_title">カメラのマークを付けるのに失敗しました</string>
+    <string name="unmarking_failed_title">カメラのマーク解除に失敗しました</string>
+    <string name="username_invalid">ユーザー名が eyes.daylightingsociety.org で認識されません。 ウェブサイトに登録していますか?</string>
+    <string name="ratelimit_failed">ピンのマークがあまりにも早すぎます。 地図の完全性を保護するため、しばらくの間はカメラをマークを付けることはできません。</string>
+    <string name="geoip_failed">あなたのIPアドレスと物理的な場所が一致しません。 マップの完全性を保護するため、プロキシを使用してピンにマークを付けることはできません。</string>
+    <string name="unmarking_permission_denied">このカメラを削除する権限がありません。</string>
+    <string name="marking_failed">不明なエラー、またはサーバーに到達できません。</string>
+    <string name="confirm">確認</string>
+    <string name="confirmations">確認</string>
+    <string name="mark_camera_confirmation">この場所でカメラにマークを付けますか?</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="okay">OK</string>
+    <string name="dismiss">消去</string>
+    <string name="register">登録</string>
+    <string name="remove">削除</string>
+    <string name="this_is_a_camera">これはカメラです</string>
+    <string name="help_title">"Where are the Eyes" について</string>
+    <string name="confirm_pins_preference">マーキングピンの確認</string>
+    <string name="show_score_preference">スコアを表示</string>
+    <string name="use_satellite_map_preference">衛星地図を使用する</string>
+    <string name="privacy_settings_description">プライバシーオプション</string>
+    <string name="mapbox_analytics_preference">Mapbox メトリック</string>
+    <string name="mapbox_analytics_summary">この設定により、アプリケーションは匿名化された場所と使用状況データを Mapbox と共有できます。 デフォルトでは、メトリックを有効にする必要があります。</string>
+    <string name="help_text">Where are the Eyes は、監視を検出し回避するためのツールです。 一緒に、あなたと他のユーザーで、監視カメラの地図を作成して、活動家、学生、および他の危険にさらされているマイノリティを保護しましょう。 カメラを渡すときは、「目」ボタンを押します。 これにより地図に追加されるか、既にそれに関して分かっていれば、その存在を確認します。\n\n赤いマークは既知のカメラを示しています。 青い点があなたの場所を示しています。 安全にお使いください。\n\nすべてのボタンアイコンは、Open Iconic から MIT ライセンスの下で利用しています。 このプロジェクトのために、アマンダ・ハウワイスによってアプリの「目」アイコンが作成されました。\n\nさらに詳細な情報は eyes.daylightingsociety.org をご覧ください。\n\nフィードバックは? 書き込み先: eyes@daylightingsociety.org\n\n匿名の分析データは、デフォルトで Mapbox に送信されます - 設定で無効にすることができます。\n\n地図の提供は © Mapbox, © OpenStreetMap</string>
+</resources>

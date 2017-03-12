@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MQv-5W-1zL" userLabel="scorebar">
-                                <rect key="frame" x="0.0" y="10" width="600" height="40"/>
+                                <rect key="frame" x="0.0" y="10" width="375" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UwB-1r-tp8" userLabel="username">
                                         <rect key="frame" x="0.0" y="0.0" width="67" height="21"/>
@@ -64,8 +65,22 @@
                                     <constraint firstItem="dAr-Wi-yw8" firstAttribute="leading" secondItem="6d5-HR-HZj" secondAttribute="trailing" constant="15" id="vsY-Qk-PD6"/>
                                 </constraints>
                             </view>
-                            <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kH1-ud-pMc">
-                                <rect key="frame" x="0.0" y="541" width="600" height="44"/>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0i-N0-NXg" userLabel="map" customClass="MGLMapView">
+                                <rect key="frame" x="0.0" y="20" width="600" height="536"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" updatesFrequently="YES" adjustable="YES"/>
+                                </accessibility>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsScrolling" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsZooming" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsRotating" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsTilting" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="showsUserLocation" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <toolbar clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kH1-ud-pMc">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="600" id="Ujw-OL-s99"/>
                                 </constraints>
@@ -100,20 +115,6 @@
                                     </mask>
                                 </variation>
                             </toolbar>
-                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0i-N0-NXg" userLabel="map" customClass="MGLMapView">
-                                <rect key="frame" x="0.0" y="20" width="600" height="536"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" updatesFrequently="YES" adjustable="YES"/>
-                                </accessibility>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsScrolling" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsZooming" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsRotating" value="YES"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="allowsTilting" value="NO"/>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="showsUserLocation" value="YES"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -151,7 +152,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="859" y="401"/>
+            <point key="canvasLocation" x="858.39999999999998" y="400.74962518740631"/>
         </scene>
         <!--About View Controller-->
         <scene sceneID="pUd-M3-C3g">
@@ -165,18 +166,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r1d-l9-Z9X">
-                                <rect key="frame" x="0.0" y="57" width="600" height="452"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r1d-l9-Z9X">
+                                <rect key="frame" x="16" y="57" width="343" height="452"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <attributedString key="attributedText">
                                     <fragment>
-                                        <mutableString key="content">Where are the Eyes is a tool for detecting and evading surveillance. Together, you and other users build a map of surveillance cameras to protect activists, students, and other at-risk minorities. When you pass a camera press the "Eye" button. This will add it to the map, or verify its existence if we already know about it.
+                                        <string key="content">Where are the Eyes is a tool for detecting and evading surveillance. Together, you and other users build a map of surveillance cameras to protect activists, students, and other at-risk minorities. When you pass a camera press the "Eye" button. This will add it to the map, or verify its existence if we already know about it.
 
 Red marks indicate known cameras. A blue dot shows your location. Stay safe.
 
 All button icons from Open Iconic under the MIT license. The app "eye" icon was created by Amanda Howanice for this project.
 
-Further information can be found at </mutableString>
+Further information can be found at </string>
                                         <attributes>
                                             <font key="NSFont" metaFont="menu" size="14"/>
                                         </attributes>
@@ -238,8 +239,14 @@ Cg
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
                             </textView>
-                            <navigationBar contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xQw-Pq-9Ry">
-                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="About Where are the Eyes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N4T-gq-gEy">
+                                <rect key="frame" x="71" y="28" width="233" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <navigationBar contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xQw-Pq-9Ry">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <navigationItem id="Bw1-Rp-SIH">
                                         <barButtonItem key="leftBarButtonItem" image="arrow_left.png" style="done" id="0KV-42-ZbU">
@@ -252,20 +259,15 @@ Cg
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="About Where are the Eyes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N4T-gq-gEy">
-                                <rect key="frame" x="200" y="28" width="233" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="N4T-gq-gEy" firstAttribute="top" secondItem="h72-UF-Nsq" secondAttribute="bottom" constant="8" id="KDr-RD-Ad9"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="r1d-l9-Z9X" secondAttribute="leading" id="Zmn-ID-ilI"/>
                             <constraint firstItem="xQw-Pq-9Ry" firstAttribute="top" secondItem="r1d-l9-Z9X" secondAttribute="bottom" id="dZ0-9L-r6y"/>
                             <constraint firstItem="N4T-gq-gEy" firstAttribute="centerX" secondItem="kwa-ak-R28" secondAttribute="centerX" id="dpE-IF-NVQ"/>
                             <constraint firstItem="r1d-l9-Z9X" firstAttribute="top" secondItem="N4T-gq-gEy" secondAttribute="bottom" constant="8" id="hJB-1u-Cgc"/>
-                            <constraint firstItem="r1d-l9-Z9X" firstAttribute="width" secondItem="kwa-ak-R28" secondAttribute="width" id="kfQ-41-qYu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="r1d-l9-Z9X" secondAttribute="trailing" id="mVm-bO-dfF"/>
                             <constraint firstItem="xQw-Pq-9Ry" firstAttribute="width" secondItem="kwa-ak-R28" secondAttribute="width" id="nwb-xT-epZ"/>
                             <constraint firstItem="8Xk-Mq-2gx" firstAttribute="top" secondItem="xQw-Pq-9Ry" secondAttribute="bottom" id="vwH-0N-d09"/>
                             <constraint firstItem="r1d-l9-Z9X" firstAttribute="top" secondItem="h72-UF-Nsq" secondAttribute="bottom" id="x1A-yS-sgt"/>
@@ -284,7 +286,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TV2-19-28D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1609" y="401"/>
+            <point key="canvasLocation" x="1608.8" y="400.74962518740631"/>
         </scene>
     </scenes>
     <resources>

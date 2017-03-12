@@ -22,9 +22,6 @@
 // Initial setup code goes here
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
-	// Increase the margins on the about text box a bit
-	self.aboutText.textContainerInset = UIEdgeInsetsMake(0, 20, 0, 20);
 }
 
 

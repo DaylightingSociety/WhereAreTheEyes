@@ -50,7 +50,9 @@
 - (void)updateMap:(NSArray*)pins
 {
 	// Remove old pins in case they've been purged
-	[_map removeAnnotations:[_map annotations]];
+	// But don't remove if something went wrong with the socket and we didn't get any new cameras
+	if( [pins count] != 0 )
+		[_map removeAnnotations:[_map annotations]];
 	for( Coord* pin in pins)
 	{
 		@try {

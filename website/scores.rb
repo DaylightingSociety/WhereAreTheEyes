@@ -81,6 +81,22 @@ module Scores
 		end
 	end
 
+	def Scores.removeCamera(username)
+		@@scores.transaction do
+			name = hashUsername(username, @@scores['salt'])
+			oldVal = @@scores[name]
+			if( oldVal == nil )
+				return
+			else
+				oldVal.cameras -= 1
+				if( oldVal.cameras < 0 )
+					oldVal.cameras = 0
+				end
+				@@scores[name] = oldVal
+			end
+		end
+	end
+
 	def Scores.addVerification(username)
 		@@scores.transaction do
 			name = hashUsername(username, @@scores['salt'])
@@ -89,6 +105,22 @@ module Scores
 				@@scores[name] = Points.new(0, 1)
 			else
 				oldVal.verifications += 1
+				@@scores[name] = oldVal
+			end
+		end
+	end
+
+	def Scores.removeVerification(username)
+		@@scores.transaction do
+			name = hashUsername(username, @@scores['salt'])
+			oldVal = @@scores[name]
+			if( oldVal == nil )
+				return
+			else
+				oldVal.verifications -= 1
+				if( oldVal.verifications < 0 )
+					oldVal.verifications = 0
+				end
 				@@scores[name] = oldVal
 			end
 		end

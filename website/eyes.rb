@@ -17,6 +17,12 @@ error Sinatra::NotFound do
 	erb :notfound
 end
 
+# Force any 404 errors to display the 404 page
+not_found do 
+	status 404
+	erb :notfound
+end
+
 # This block forces SSL for all users all the time.
 before '*' do
 	if( request.url.start_with?("http://") )

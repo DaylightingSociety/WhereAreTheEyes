@@ -71,7 +71,7 @@ end
 
 get '/post/:name' do |name|
 	if( name =~ /[^A-Za-z0-9_]/ )
-		redirect '/notfound'
+		halt 404
 	end
 	if( File.exists?(Configuration::PostsDir + "/" + name + ".md") )
 		fname = Configuration::PostsDirName + "/" + name + ".md"
@@ -107,12 +107,15 @@ get '/downloads/android' do
 	redirect "https://play.google.com/store/apps/details?id=org.daylightingsociety.wherearetheeyes"
 end
 
+get '/downloads/f-droid' do
+	redirect "https://f-droid.org/app/org.daylightingsociety.wherearetheeyes"
+end
+
 get '/about' do
 	md = getMarkdown("about.md")
 	erb :about, :locals => { :text => md }
 end
 
 get '/propaganda' do
-	md = getMarkdown("propaganda.md")
-	erb :propaganda, :locals => { :text => md }
+	erb :propaganda
 end

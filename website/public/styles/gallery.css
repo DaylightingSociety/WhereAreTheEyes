@@ -1,0 +1,33 @@
+.gallery-row {
+	display: inline-block;
+	margin: 0 auto;
+	clear: left right;
+}
+
+.gallery {
+	margin: 5px;
+	border: 1px solid #ccc;
+	float: left;
+	width: 180px;
+	height: 340px;
+	padding-bottom: 40px;
+	position: relative;
+}
+
+.gallery:hover {
+	border: 1px solid #777;
+}
+
+.gallery img {
+	width: 100%;
+	height: auto;
+}
+
+.gallery #desc {
+	padding-bottom: 15px;
+	position: absolute;
+	text-align: center;
+	width: 100%;
+	left: 0px;
+	bottom: 0px;
+}

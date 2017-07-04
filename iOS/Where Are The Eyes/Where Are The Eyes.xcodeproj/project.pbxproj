@@ -38,9 +38,7 @@
 		268F32A81CA2F73400844B62 /* Where_Are_The_EyesUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 268F32A71CA2F73400844B62 /* Where_Are_The_EyesUITests.m */; };
 		269B19A11CFD1A8B00593460 /* GPS.m in Sources */ = {isa = PBXBuildFile; fileRef = 269B19A01CFD1A8B00593460 /* GPS.m */; };
 		26A54C311CFE6DBF00564F42 /* DownloadPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A54C301CFE6DBF00564F42 /* DownloadPins.m */; };
-		26A54C351CFE72A700564F42 /* Coord.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A54C341CFE72A700564F42 /* Coord.m */; };
-		26A6F6CA1D7DE6FF004627FA /* map_pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 26A6F6C81D7DE6FF004627FA /* map_pin.png */; };
-		26A6F6CB1D7DE6FF004627FA /* map_pin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 26A6F6C91D7DE6FF004627FA /* map_pin@2x.png */; };
+		26A54C351CFE72A700564F42 /* Pin.m in Sources */ = {isa = PBXBuildFile; fileRef = 26A54C341CFE72A700564F42 /* Pin.m */; };
 		26B7258B1D21EF7000EB2A00 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26B7258A1D21EF7000EB2A00 /* AboutViewController.m */; };
 		26ED3C211DC7BD9A0021DFBE /* UnmarkPin.m in Sources */ = {isa = PBXBuildFile; fileRef = 26ED3C201DC7BD9A0021DFBE /* UnmarkPin.m */; };
 		26ED3C241DC92BD80021DFBE /* Vibrate.m in Sources */ = {isa = PBXBuildFile; fileRef = 26ED3C231DC92BD80021DFBE /* Vibrate.m */; };
@@ -124,8 +122,8 @@
 		26A54C2F1CFE6CBE00564F42 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		26A54C301CFE6DBF00564F42 /* DownloadPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownloadPins.m; sourceTree = "<group>"; };
 		26A54C321CFE6E0300564F42 /* DownloadPins.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadPins.h; sourceTree = "<group>"; };
-		26A54C331CFE724800564F42 /* Coord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Coord.h; sourceTree = "<group>"; };
-		26A54C341CFE72A700564F42 /* Coord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Coord.m; sourceTree = "<group>"; };
+		26A54C331CFE724800564F42 /* Pin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pin.h; sourceTree = "<group>"; };
+		26A54C341CFE72A700564F42 /* Pin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pin.m; sourceTree = "<group>"; };
 		26A6F6C81D7DE6FF004627FA /* map_pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_pin.png; sourceTree = "<group>"; };
 		26A6F6C91D7DE6FF004627FA /* map_pin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_pin@2x.png"; sourceTree = "<group>"; };
 		26B725891D21EF6300EB2A00 /* AboutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -226,8 +224,8 @@
 				269B19A21CFD233800593460 /* GPS.h */,
 				269B19A01CFD1A8B00593460 /* GPS.m */,
 				26A54C2F1CFE6CBE00564F42 /* Constants.h */,
-				26A54C331CFE724800564F42 /* Coord.h */,
-				26A54C341CFE72A700564F42 /* Coord.m */,
+				26A54C331CFE724800564F42 /* Pin.h */,
+				26A54C341CFE72A700564F42 /* Pin.m */,
 				26A54C321CFE6E0300564F42 /* DownloadPins.h */,
 				26A54C301CFE6DBF00564F42 /* DownloadPins.m */,
 				26ED3C251DC92BE70021DFBE /* Vibrate.h */,
@@ -384,25 +382,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				265D8F061D4340BD00ACDF5A /* thumb_up@2x.png in Resources */,
-				265D8EFE1D43149700ACDF5A /* cog@2x.png in Resources */,
-				262C472D1DC4444B0091DA8C /* map_pin_transparent@2x.png in Resources */,
-				265D8EFD1D43149700ACDF5A /* camera@2x.png in Resources */,
 				268F32921CA2F73400844B62 /* LaunchScreen.storyboard in Resources */,
 				268F328F1CA2F73400844B62 /* Assets.xcassets in Resources */,
-				265D8F031D433D2600ACDF5A /* arrow_left@2x.png in Resources */,
 				2644ED7C1CB0DACB00B63161 /* cog.png in Resources */,
+				265D8EFE1D43149700ACDF5A /* cog@2x.png in Resources */,
 				265D8EF61D4311E500ACDF5A /* camera.png in Resources */,
+				265D8EFD1D43149700ACDF5A /* camera@2x.png in Resources */,
+				2644ED7E1CB0DACB00B63161 /* help.png in Resources */,
 				265D8EFF1D43149700ACDF5A /* help@2x.png in Resources */,
 				267A274A1DAC17D20016CE7B /* InfoPlist.strings in Resources */,
 				265D8EF81D4311F000ACDF5A /* thumb_up.png in Resources */,
-				2644ED7E1CB0DACB00B63161 /* help.png in Resources */,
-				265D8F041D433D2600ACDF5A /* eye@2x.png in Resources */,
-				26A6F6CA1D7DE6FF004627FA /* map_pin.png in Resources */,
-				26A6F6CB1D7DE6FF004627FA /* map_pin@2x.png in Resources */,
-				262C472C1DC4444B0091DA8C /* map_pin_transparent.png in Resources */,
+				265D8F061D4340BD00ACDF5A /* thumb_up@2x.png in Resources */,
 				2644ED7D1CB0DACB00B63161 /* eye.png in Resources */,
+				265D8F041D433D2600ACDF5A /* eye@2x.png in Resources */,
+				262C472C1DC4444B0091DA8C /* map_pin_transparent.png in Resources */,
+				262C472D1DC4444B0091DA8C /* map_pin_transparent@2x.png in Resources */,
 				2644ED7A1CB0DACB00B63161 /* arrow_left.png in Resources */,
+				265D8F031D433D2600ACDF5A /* arrow_left@2x.png in Resources */,
 				267A27441DAC14AE0016CE7B /* Localizable.strings in Resources */,
 				268E3B4D1CFD139F0044EA96 /* Settings.bundle in Resources */,
 				268F328D1CA2F73400844B62 /* Main.storyboard in Resources */,
@@ -454,7 +450,7 @@
 				2689FE4F1D3F00180033C9D5 /* Score.m in Sources */,
 				2601C2901D013CC9002034E2 /* MarkPin.m in Sources */,
 				269B19A11CFD1A8B00593460 /* GPS.m in Sources */,
-				26A54C351CFE72A700564F42 /* Coord.m in Sources */,
+				26A54C351CFE72A700564F42 /* Pin.m in Sources */,
 				268F32841CA2F73400844B62 /* main.m in Sources */,
 				26A54C311CFE6DBF00564F42 /* DownloadPins.m in Sources */,
 			);

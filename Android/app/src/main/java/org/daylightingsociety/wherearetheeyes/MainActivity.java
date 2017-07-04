@@ -8,36 +8,42 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.location.*;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mapbox.mapboxsdk.MapboxAccountManager;
+import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.constants.MyBearingTracking;
+import com.mapbox.mapboxsdk.constants.MyLocationTracking;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapzen.android.lost.api.LocationServices;
+import com.mapbox.mapboxsdk.maps.TrackingSettings;
 
 public class MainActivity extends Activity {
     private static ImageButton camera = null;
     private static MapView mapView = null;
     private static GPS gps = null;
     private static LinearLayout scorebar = null;
+    private static LinearLayout buttonBar = null;
     private static TextView usernameLabel = null;
     private static TextView cameraScore = null;
     private static TextView verificationScore = null;
@@ -48,8 +54,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Configure our access token and tileset for the mapView
+        // Must be done -immediately- before the layout XML is loaded
+        Mapbox.getInstance(this, Constants.APIKEY);
         setContentView(R.layout.activity_main);
+
         Location l = null;
+        buttonBar = (LinearLayout) findViewById(R.id.buttonBar);
         camera = (ImageButton) findViewById(R.id.camera);
         mapView = (MapView) findViewById(R.id.map);
         scorebar = (LinearLayout) findViewById(R.id.scoreBar);
@@ -58,8 +70,9 @@ public class MainActivity extends Activity {
         verificationScore = (TextView) findViewById(R.id.verification_score);
         score = new Score(this, cameraScore, verificationScore);
 
-        Log.d("Main", "I solemnly swear that I am up to no good...");
+        mapView.onCreate(savedInstanceState);
 
+        Log.d("Main", "I solemnly swear that I am up to no good...");
 
         // Request location permissions if needed, and pull in last known location if possible
         acquireLocationPerms();
@@ -77,23 +90,7 @@ public class MainActivity extends Activity {
             // They'll just have to fix the problem.
         }
 
-
-        // Tell the GPS to pull in pins for our last known location,
-        // if we have any idea of where we are at all.
-        if( l != null )
-            gps.onLocationChanged(l);
-
-        // Configure our access token and tileset for the mapView
-        // In the future MapboxAccountManager will be necessary, but for now only setAccessToken
-        // seems to work, so we'll just use them both.
-        MapboxAccountManager.start(this, Constants.APIKEY);
-        mapView.setAccessToken(Constants.APIKEY);
-
-        // Set whatever style the user prefers
-        if( satelliteMapEnabled() )
-            mapView.setStyle(Style.SATELLITE_STREETS);
-        else
-            mapView.setStyleUrl(Style.MAPBOX_STREETS);
+        setMapTheme();
 
         // This block does some initialization for the map, instead of the mapview
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -101,9 +98,6 @@ public class MainActivity extends Activity {
             public void onMapReady(MapboxMap mapboxMap) {
                 // Callback to an empty function on FPS changes
                 mapboxMap.setOnFpsChangedListener(new EyesOnFPSChangedListener());
-
-                // Put a little blue marker on our position
-                mapboxMap.setMyLocationEnabled(true);
 
                 // Set a callback to create our custom info window when a marker is tapped
                 mapboxMap.setInfoWindowAdapter(getInfoWindowHandler());
@@ -126,23 +120,35 @@ public class MainActivity extends Activity {
                             .build();
                     mapboxMap.moveCamera(CameraUpdateFactory.newCameraPosition(pos));
                 }
+
+                // Put a little marker on our position
+                mapboxMap.setMyLocationEnabled(true);
+                mapboxMap.getMyLocationViewSettings().setPadding(0, 500, 0, 0);
+                mapboxMap.getMyLocationViewSettings().setForegroundTintColor(Color.parseColor("#3f44fd"));
+                mapboxMap.getMyLocationViewSettings().setAccuracyTintColor(Color.parseColor("#fd3f26"));
             }
         });
 
+        setMapTracking();
 
         // Set up the image cache for pins
         Images.init(this);
 
-        // This finally creates the map.
-        // Note: Access token MUST be set before this line
-        mapView.onCreate(savedInstanceState);
-
         if( score.scoresEnabled(getUsername()) ) {
             drawScores();
             score.updateScore(getUsername());
+            setMapDimensions(true);
         } else {
             scorebar.setVisibility(View.INVISIBLE);
+            setMapDimensions(false);
         }
+
+        // Tell the GPS to pull in pins for our last known location,
+        // if we have any idea of where we are at all.
+        // NOTE: We do this last so the map will be initialized
+        // before we download pins and try to draw them.
+        if( l != null )
+            gps.onLocationChanged(l);
     }
 
     // This returns a codeblock to make the little info windows for pins
@@ -211,10 +217,61 @@ public class MainActivity extends Activity {
         return username;
     }
 
-    public Boolean satelliteMapEnabled() {
+    public String getThemePreference() {
         Context context = MainActivity.this;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("use_satellite_map", false);
+        final String theme = prefs.getString("theme", getResources().getString(R.string.theme_default_value));
+        return theme;
+    }
+
+    public String getTrackingPreference() {
+        Context context = MainActivity.this;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final String tracking = prefs.getString("track", getResources().getString(R.string.track_default_value));
+        return tracking;
+    }
+
+    public void setMapTheme() {
+        switch(getThemePreference())
+        {
+            case "streets":
+                mapView.setStyleUrl(Style.MAPBOX_STREETS);
+                break;
+            case "satellite":
+                mapView.setStyleUrl(Style.SATELLITE_STREETS);
+                break;
+            case "light":
+                mapView.setStyleUrl(Style.LIGHT);
+                break;
+            case "dark":
+                mapView.setStyleUrl(Style.DARK);
+                break;
+        }
+    }
+
+    public void setMapTracking() {
+        final String trackingPref = getTrackingPreference();
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                TrackingSettings tracking = mapboxMap.getTrackingSettings();
+                switch(trackingPref)
+                {
+                    case "position":
+                        tracking.setMyLocationTrackingMode(MyLocationTracking.TRACKING_FOLLOW);
+                        tracking.setMyBearingTrackingMode(MyBearingTracking.NONE);
+                        break;
+                    case "direction":
+                        tracking.setMyLocationTrackingMode(MyLocationTracking.TRACKING_NONE);
+                        tracking.setMyBearingTrackingMode(MyBearingTracking.COMPASS);
+                        break;
+                    case "movement":
+                        tracking.setMyBearingTrackingMode(MyLocationTracking.TRACKING_NONE);
+                        tracking.setMyLocationTrackingMode(MyBearingTracking.GPS);
+                        break;
+                }
+            }
+        });
     }
 
     // Centers the map over the last known user location
@@ -335,6 +392,23 @@ public class MainActivity extends Activity {
         startActivity(help);
     }
 
+    public void recenterCamera(View view) {
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(MapboxMap mapboxMap) {
+                Location loc = gps.getLocation();
+                if( loc == null )
+                    return;
+                CameraPosition position = new CameraPosition.Builder()
+                        .target(new LatLng(loc.getLatitude(), loc.getLongitude()))
+                        .zoom(17)
+                        .bearing(0)
+                        .build();
+                mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(position), 3000);
+            }
+        });
+    }
+
     // Put up a little prompt and then redirect users to settings to give us more power
     private void acquireLocationPerms() {
         // Only ask for permission (and get a callback) if we don't already have it.
@@ -415,9 +489,40 @@ public class MainActivity extends Activity {
         }
     }
 
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0)
+        {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    // Adjusts the map to start at the correct spot so it doesn't overlap other views
+    private void setMapDimensions(boolean scoresEnabled)
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int startY = 0;
+        int height = displayMetrics.heightPixels;
+        height -= buttonBar.getLayoutParams().height;
+        height -= getStatusBarHeight();
+        if( scoresEnabled )
+        {
+            height -= scorebar.getLayoutParams().height;
+            startY += scorebar.getLayoutParams().height;
+        }
+        mapView.setLayoutParams(new RelativeLayout.LayoutParams(displayMetrics.widthPixels, height));
+        mapView.setY(startY);
+        mapView.requestLayout();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
+        mapView.onStart();
     }
 
     @Override
@@ -432,19 +537,17 @@ public class MainActivity extends Activity {
 
         if( score.scoresEnabled(getUsername()) ) {
             drawScores();
+            setMapDimensions(true);
         } else {
             scorebar.setVisibility(View.INVISIBLE);
+            setMapDimensions(false);
         }
 
         // Set the correct style if it's changed in preferences
         // We do this in onResume() so when we return from the Settings activity we'll immediately
         // load the new style.
-        String style = mapView.getStyleUrl();
-        if( satelliteMapEnabled() && style.equals(Style.MAPBOX_STREETS) )
-            mapView.setStyle(Style.SATELLITE_STREETS);
-        else if( !satelliteMapEnabled() && style.equals(Style.SATELLITE_STREETS) )
-            mapView.setStyle(Style.MAPBOX_STREETS);
-
+        setMapTheme();
+        setMapTracking();
     }
 
     @Override
@@ -465,6 +568,15 @@ public class MainActivity extends Activity {
         }
     }
 
+    // Called when screen rotates and we need to manually resize the map
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+
+        setMapDimensions(score.scoresEnabled(getUsername()));
+    }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -474,6 +586,7 @@ public class MainActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
+        mapView.onStop();
     }
 
     @Override

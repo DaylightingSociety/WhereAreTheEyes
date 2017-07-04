@@ -26,9 +26,22 @@
     <string name="help_title">About "Where are the Eyes"</string>
     <string name="confirm_pins_preference">Confirm marking pins</string>
     <string name="show_score_preference">Show score</string>
-    <string name="use_satellite_map_preference">Use satellite map</string>
+    <string name="theme_preference">Map Theme</string>
+    <string-array
+        name="theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Streets</item>
+        <item>Satellite</item>
+    </string-array>
+    <string name="track_preference">Track</string>
+    <string-array
+        name="track_entries">
+        <item>Position</item>
+        <item>Movement</item>
+    </string-array>
     <string name="privacy_settings_description">Privacy Options</string>
-    <string name="mapbox_analytics_preference">Mapbox Metrics</string>
-    <string name="mapbox_analytics_summary">This setting allows the application to share anonymized location and usage data with Mapbox. We are required to enable metrics by default.</string>
+    <string name="mapbox_analytics_preference">Telemetry</string>
+    <string name="mapbox_analytics_summary">This setting shares anonymized location and usage data with Mapbox. We are required to enable telemetry by default. To disable, press the \"MapBox\" button on the main screen.</string>
     <string name="help_text">Where are the Eyes is a tool for detecting and evading surveillance. Together, you and other users build a map of surveillance cameras to protect activists, students, and other at-risk minorities. When you pass a camera press the "Eye" button. This will add it to the map, or verify its existence if we already know about it.\n\nRed marks indicate known cameras. A blue dot shows your location. Stay safe.\n\nAll button icons from Open Iconic under the MIT license. The app "eye" icon was created by Amanda Howanice for this project.\n\nFurther information can be found at eyes.daylightingsociety.org\n\nFeedback? Write to: eyes@daylightingsociety.org\n\nAnonymous analytics data is sent to Mapbox by default - it can be disabled in Settings.\n\nMap provided via © Mapbox, © OpenStreetMap</string>
 </resources>

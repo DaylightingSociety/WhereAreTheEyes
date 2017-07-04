@@ -24,11 +24,26 @@
     <string name="ratelimit_failed">Está a marcação pinos muito rapidamente. Para proteger a integridade do mapa não podemos permitir que você marque câmeras por um tempo.</string>
     <string name="mapbox_analytics_preference">Métricas do MapBox</string>
     <string name="mapbox_analytics_summary">Isso permite que o aplicativo compartilhe dados anônimos de localização e uso com o Mapbox. Somos obrigados a permitir métricas por padrão.</string>
-    <string name="use_satellite_map_preference">Usar mapa de satélite</string>
+    <string-array
+        name="theme_entries">
+        <item>Luminoso</item>
+        <item>Escuro</item>
+        <item>Ruas</item>
+        <item>Satélite</item>
+    </string-array>
+    <string name="track_preference">Seguir</string>
+    <string-array
+        name="track_entries">
+        <item>Posição</item>
+        <item>Movimento</item>
+    </string-array>
     <string name="privacy_settings_description">Opções de privacidade</string>
     <string name="this_is_a_camera">Esta é uma câmera</string>
     <string name="remove">Remover</string>
     <string name="unmarking_failed_title">Falha na remoção da câmera</string>
     <string name="unmarking_permission_denied">Você não tem permissão para remover esta câmera.</string>
     <string name="confirmations">Confirmações</string>
+    <string name="theme_default_value">dark</string>
+    <string name="theme_preference">Tema do mapa</string>
+    <string name="track_default_value">position</string>
 </resources>

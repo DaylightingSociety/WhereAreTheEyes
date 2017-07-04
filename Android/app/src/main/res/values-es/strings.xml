@@ -26,9 +26,24 @@
 	<string name="help_title">Sobre "Where are the Eyes"</string>
 	<string name="confirm_pins_preference">Confirmar al hacer marcas</string>
 	<string name="show_score_preference">Ver puntaje</string>
-	<string name="use_satellite_map_preference">Usar mapa satelital</string>
+    <string-array
+        name="theme_entries">
+        <item>Claro</item>
+        <item>Oscuro</item>
+        <item>Calles</item>
+        <item>Satélite</item>
+    </string-array>
+    <string name="track_preference">Seguir</string>
+    <string-array
+        name="track_entries">
+        <item>Posición</item>
+        <item>Movimiento</item>
+    </string-array>
 	<string name="privacy_settings_description">Opciones de privacidad</string>
 	<string name="mapbox_analytics_preference">Métricas de Mapbox</string>
 	<string name="mapbox_analytics_summary">Este ajuste le permite a la aplicación enviar las ubicaciones anonimizadas y el uso de datos con Mapbox. Estamos obligadas a habilitar las métricas por defecto</string>
 	<string name="help_text">Where are the eyes es una herramienta para detectar y evadir la vigilancia. Juntas, vos y otras usuarias construimos un mapa de las cámaras de vigilancia y protegemos a activistas, estudiantes y otras minorías en riesgo. Cuando veas una cámara presiona el botón del "ojo", con esto la agregamos al mapa, o verificamos si ya fue marcada.\n\nLas marcas rojas indican cámaras ya conocidas. El punto azul muestra tu ubicación. ¡Cuidate!.\n\n Todos los iconos de los botones son de Open Iconic y están con licencia MIT. El icono del "ojo" fue creado por Amanda Howanice para este proyecto.\n\nPodés encontrar mas información en eyes.daylightingsociety.org\n\n¿Comentarios? Escribinos a: eyes@daylightingsociety.org\n\nSe envían estadísticas anónimas a Mapbox por defecto - pero pueden desactivarse desde la configuración\n\nLos mapas son proporcionados por © Mapbox, © OpenStreetMap</string>
+    <string name="theme_default_value">dark</string>
+	<string name="theme_preference">Tema del mapa</string>
+	<string name="track_default_value">position</string>
 </resources>

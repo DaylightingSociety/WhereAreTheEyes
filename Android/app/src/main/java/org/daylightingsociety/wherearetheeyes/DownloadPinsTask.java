@@ -46,7 +46,7 @@ public class DownloadPinsTask extends AsyncTask<PinData, Void, Void> {
 
                 if( !p.pins.containsKey(pos) ) {
                     p.pins.put(pos, verifies);
-                    Log.d("GPS", "Parsed pin at: " + pinString);
+                    //Log.d("GPS", "Parsed pin at: " + pinString);
                 }
             }
         } catch(Exception e) {

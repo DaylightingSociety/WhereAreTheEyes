@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DownloadPins.h"
-#import "Coord.h"
+#import "Pin.h"
 #import "Constants.h"
 
 @implementation DownloadPins
@@ -25,7 +25,7 @@
 	NSString* data = [NSString stringWithContentsOfURL:url usedEncoding:&encoding error:&error];
 	
 	// And start parsing
-	NSMutableArray* coords = [[NSMutableArray alloc] init];
+	NSMutableArray* pins = [[NSMutableArray alloc] init];
 	NSArray* lines = [data componentsSeparatedByString:@"\n"];
 	for( NSString* line in lines )
 	{
@@ -36,12 +36,12 @@
 			float lat = [chunks[0] floatValue];
 			float lon = [chunks[1] floatValue];
 			int verifications = [chunks[2] intValue];
-			Coord* c = [[Coord alloc] initLatitude:lat longitude:lon confirmations:verifications];
-			[coords addObject:c];
+			Pin* c = [[Pin alloc] initLatitude:lat longitude:lon confirmations:verifications type:UNKNOWN];
+			[pins addObject:c];
 		}
 	}
 	
-	return coords;
+	return pins;
 }
 
 @end

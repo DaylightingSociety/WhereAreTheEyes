@@ -16,8 +16,20 @@
 #define kConfirmMarkingCameras @"confirm_marking_cameras"
 #define kShowScore @"show_score"
 #define kMapboxMetrics @"MGLMapboxMetricsEnabled"
-#define kTransparentMarkers @"transparent_markers"
-#define kSatelliteMap @"use_satellite_map"
+#define kMapTheme @"theme"
+#define kMapTracking @"track"
+#define kTapToMark @"tap_map_to_mark"
+
+#define kMapThemeDark      @"dark"
+#define kMapThemeLight     @"light"
+#define kMapThemeSatellite @"satellite"
+#define kMapThemeStreets   @"streets"
+
+#define kMapTrackPosition  @"position"
+#define kMapTrackDirection @"direction"
+#define kMapTrackMovement  @"movement"
+
+#define kScorebarHeight 20
 
 #define kPostTimeout 20.0
 #define kTimeoutAfterPosting 1.0f

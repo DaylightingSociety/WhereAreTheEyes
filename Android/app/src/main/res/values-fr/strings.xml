@@ -26,9 +26,24 @@
 	<string name="help_title">À propos de "Where are the Eyes"</string>
 	<string name="confirm_pins_preference">Confirmer le marquage</string>
 	<string name="show_score_preference">Score</string>
-	<string name="use_satellite_map_preference">Vue satellite</string>
+    <string-array
+        name="theme_entries">
+        <item>Clair</item>
+        <item>Sombre</item>
+        <item>Rues</item>
+        <item>Satellite</item>
+    </string-array>
+    <string name="track_preference">Suivre</string>
+    <string-array
+        name="track_entries">
+        <item>Position</item>
+        <item>Mouvement</item>
+    </string-array>
 	<string name="privacy_settings_description">Vie privée</string>
 	<string name="mapbox_analytics_preference">Mesures Mapbox</string>
 	<string name="mapbox_analytics_summary">Ce paramètre permet à l\'application de partager de façon anonyme la position et l\'usage de la data avec Mapbox. Nous sommes obligés de partager les mesures par défaut.</string>
-	<string name="help_text">Where are the Eyes est un outil pour détecter et échapper à la vidéo-surveillance. Ensemble, vous et les utilisateurs fabriquez une carte des caméras de vidéo-surveillance pour protéger les activistes, étudiants et autres minorités à risque. Quand vous croisez une caméra, appuyez sur le bouton œil. Cela ajoute la caméra à la carte ou cela vérifie son existance si nous avons déjà des informations sur celle-ci.\n\nLes marques rouges indiquent des caméras connues. Le point bleu est votre position. Restez en sécurité.\n\nToutes images de boutons sont issus de Open Iconic sous licence MIT. L\'icône "œil" a été créé par Amanda Howanice pour ce projet.\n\nPlus d\'informations sur eyes.daylightingsociety.org\n\nFeedback? Contact : eyes@daylightingsociety.org\n\nDes données d\'analyse sont envoyées à Mapbox par défaut (désactivable dans les Options).\n\nCarte par © Mapbox, © OpenStreetMap</string>
+	<string name="help_text">Where are the Eyes est un outil pour détecter et échapper à la vidéo-surveillance. Ensemble, vous et les utilisateurs fabriquez une carte des caméras de vidéo-surveillance pour protéger les activistes, étudiants et autres minorités à risque. Quand vous croisez une caméra, appuyez sur le bouton œil. Cela ajoute la caméra à la carte ou cela vérifie son existance si nous avons déjà des informations sur celle-ci.\n\nLes marques rouges indiquent des caméras connues. Le point bleu est votre position. Restez en sécurité.\n\nToutes images de boutons sont issus de Open Iconic sous licence MIT. L\'icône "œil" a été créé par Amanda Howanice pour ce projet.\n\nPlus d\'informations sur eyes.daylightingsociety.org\n\nFeedback? Contact : eyes@daylightingsociety.org\n\nDes données d\'analyse ton envoyées à Mapbox par défaut (désactivable dans les Options).\n\nCarte par © Mapbox, © OpenStreetMap</string>
+    <string name="theme_default_value">dark</string>
+	<string name="theme_preference">Thème de la carte</string>
+	<string name="track_default_value">position</string>
 </resources>

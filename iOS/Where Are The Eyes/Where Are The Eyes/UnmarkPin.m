@@ -13,9 +13,9 @@
 
 @implementation UnmarkPin
 
-+ (id)unmarkPinAt:(Coord*)c withUsername:(NSString*)username
++ (id)unmarkPinAt:(Pin*)p withUsername:(NSString*)username
 {
-	NSLog(@"Unmarking pin at lat:%f lon:%f with username %@", c.latitude, c.longitude, username);
+	NSLog(@"Unmarking pin at lat:%f lon:%f with username %@", p.latitude, p.longitude, username);
 	[Vibrate pulse]; // Let the user know their unmark request has been noticed
 	
 	// Set the URL and create an HTTP request
@@ -29,7 +29,7 @@
 	[request setTimeoutInterval:kPostTimeout];
 	
 	// Convert your data and set your request's HTTPBody property
-	NSString* data = [NSString stringWithFormat:@"username=%@&latitude=%f&longitude=%f", username, c.latitude, c.longitude];
+	NSString* data = [NSString stringWithFormat:@"username=%@&latitude=%f&longitude=%f", username, p.latitude, p.longitude];
 	
 	// Set the size of the request
 	[request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-length"];

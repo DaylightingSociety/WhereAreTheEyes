@@ -26,9 +26,24 @@
     <string name="help_title">"Where are the Eyes" について</string>
     <string name="confirm_pins_preference">マーキングピンの確認</string>
     <string name="show_score_preference">スコアを表示</string>
-    <string name="use_satellite_map_preference">衛星地図を使用する</string>
+    <string-array
+        name="theme_entries">
+        <item>明朗</item>
+        <item>暗い</item>
+        <item>通り</item>
+        <item>衛星</item>
+    </string-array>
+    <string name="track_preference">フォローする</string>
+    <string-array
+        name="track_entries">
+        <item>位置</item>
+        <item>移動</item>
+    </string-array>
     <string name="privacy_settings_description">プライバシーオプション</string>
     <string name="mapbox_analytics_preference">Mapbox メトリック</string>
     <string name="mapbox_analytics_summary">この設定により、アプリケーションは匿名化された場所と使用状況データを Mapbox と共有できます。 デフォルトでは、メトリックを有効にする必要があります。</string>
     <string name="help_text">Where are the Eyes は、監視を検出し回避するためのツールです。 一緒に、あなたと他のユーザーで、監視カメラの地図を作成して、活動家、学生、および他の危険にさらされているマイノリティを保護しましょう。 カメラを渡すときは、「目」ボタンを押します。 これにより地図に追加されるか、既にそれに関して分かっていれば、その存在を確認します。\n\n赤いマークは既知のカメラを示しています。 青い点があなたの場所を示しています。 安全にお使いください。\n\nすべてのボタンアイコンは、Open Iconic から MIT ライセンスの下で利用しています。 このプロジェクトのために、アマンダ・ハウワイスによってアプリの「目」アイコンが作成されました。\n\nさらに詳細な情報は eyes.daylightingsociety.org をご覧ください。\n\nフィードバックは? 書き込み先: eyes@daylightingsociety.org\n\n匿名の分析データは、デフォルトで Mapbox に送信されます - 設定で無効にすることができます。\n\n地図の提供は © Mapbox, © OpenStreetMap</string>
+    <string name="theme_default_value">dark</string>
+    <string name="theme_preference">地図テーマ</string>
+    <string name="track_default_value">position</string>
 </resources>

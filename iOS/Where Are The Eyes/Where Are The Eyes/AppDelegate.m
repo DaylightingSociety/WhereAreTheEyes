@@ -10,10 +10,6 @@
 #import "ViewController.h"
 #import "Constants.h"
 
-@interface AppDelegate ()
-
-@end
-
 @implementation AppDelegate
 
 
@@ -25,12 +21,13 @@
 										  [NSNumber numberWithBool:YES], kConfirmMarkingCameras,
 										  [NSNumber numberWithBool:NO], kShowScore,
 										  [NSNumber numberWithBool:YES], kMapboxMetrics,
-										  [NSNumber numberWithBool:NO], kTransparentMarkers,
-										  [NSNumber numberWithBool:NO], kSatelliteMap,
+										  [NSNumber numberWithBool:NO], kTapToMark,
+										  kMapThemeLight, kMapTheme,
+										  kMapTrackPosition, kMapTracking,
 										  nil];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsDefaults];
 	[[NSUserDefaults standardUserDefaults] synchronize];
-    // Override point for customization after application launch.
+	
     return YES;
 }
 

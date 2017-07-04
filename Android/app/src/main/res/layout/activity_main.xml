@@ -10,7 +10,6 @@
     android:paddingTop="0dp"
     tools:context="org.daylightingsociety.wherearetheeyes.MainActivity">
 
-
     <com.mapbox.mapboxsdk.maps.MapView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -93,55 +92,59 @@
 
         <Space
             android:layout_width="1dp"
-            android:layout_weight=".10"
+            android:layout_weight=".05"
             android:layout_height="wrap_content" />
 
         <ImageButton
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
             android:id="@+id/settings"
-            android:background="@drawable/cog"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical|start"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
+            android:background="@drawable/cog"
             android:onClick="openSettings"
-            android:layout_gravity="center_vertical|start" />
+            android:scaleType="fitCenter" />
 
         <Space
             android:layout_width="1dp"
-            android:layout_weight=".30"
+            android:layout_weight=".20"
             android:layout_height="wrap_content" />
 
         <ImageButton
-            android:layout_width="100dp"
-            android:layout_height="50dp"
             android:id="@+id/camera"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="5dp"
             android:layout_gravity="center_vertical"
+            android:width="200dp"
+            android:background="@drawable/eye"
             android:clickable="true"
             android:enabled="true"
-            android:background="@drawable/eye"
-            android:onClick="markOrVerifyCamera"
-            android:width="200dp" />
+            android:onClick="markOrVerifyCamera" />
 
         <Space
             android:layout_width="1dp"
-            android:layout_weight=".30"
+            android:layout_weight=".20"
             android:layout_height="wrap_content" />
 
+
         <ImageButton
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:gravity="center_vertical"
             android:id="@+id/help"
-            android:background="@drawable/help"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical|end"
             android:width="100dp"
-            android:onClick="openHelp"
-            android:layout_gravity="center_vertical|end" />
+            android:background="@drawable/help"
+            android:gravity="center_vertical"
+            android:onClick="openHelp" />
 
         <Space
             android:layout_width="1dp"
-            android:layout_weight=".10"
+            android:layout_weight=".05"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

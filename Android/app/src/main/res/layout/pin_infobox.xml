@@ -4,6 +4,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+    <org.daylightingsociety.wherearetheeyes.InfoWindowTipView
+        android:layout_width="32dp"
+        android:layout_height="12dp"
+        android:layout_centerVertical="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/infobox"/>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -15,7 +22,7 @@
             android:id="@+id/tooltip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@android:color/black"
             android:textSize="18sp"
             android:maxEms="17"
             android:layout_centerVertical="true"
@@ -34,14 +41,6 @@
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp" />
-
     </RelativeLayout>
 
-
-    <com.mapbox.mapboxsdk.annotations.InfoWindowTipView
-        android:layout_width="32dp"
-        android:layout_height="10dp"
-        android:layout_centerVertical="false"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/infobox"/>
 </RelativeLayout>

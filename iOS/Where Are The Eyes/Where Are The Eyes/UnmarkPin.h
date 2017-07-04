@@ -9,11 +9,11 @@
 #ifndef UnmarkPin_h
 #define UnmarkPin_h
 
-#import "Coord.h"
+#import "Pin.h"
 
 @interface UnmarkPin : NSObject
 
-+ (id)unmarkPinAt:(Coord*)c withUsername:(NSString*)username;
++ (id)unmarkPinAt:(Pin*)c withUsername:(NSString*)username;
 
 @end
 

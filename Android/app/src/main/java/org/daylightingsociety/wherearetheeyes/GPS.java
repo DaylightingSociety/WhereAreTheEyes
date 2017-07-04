@@ -33,6 +33,7 @@ public class GPS implements LocationListener {
     public void onLocationChanged(Location loc) {
         // If this is our first location update just prime everything
         if( position == null || lastKnown == null ) {
+            Log.d("GPS", "Initial ping, downloading first pins.");
             position = loc;
             lastKnown = new Date();
             new DownloadPinsTask().execute(new PinData(new HashMap<LatLng, Integer>(), map, position));

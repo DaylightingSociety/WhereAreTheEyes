@@ -28,8 +28,7 @@ public class Images {
         if( cameraIcon != null )
             return cameraIcon;
         IconFactory iconFactory = IconFactory.getInstance(mainContext);
-        Drawable iconDrawable = ContextCompat.getDrawable(mainContext, R.drawable.map_pin);
-        cameraIcon = iconFactory.fromDrawable(iconDrawable);
+        cameraIcon = iconFactory.fromResource(R.drawable.map_pin);
         return cameraIcon;
     }
 

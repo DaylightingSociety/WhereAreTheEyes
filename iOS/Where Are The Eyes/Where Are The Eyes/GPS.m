@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "GPS.h"
 #import "DownloadPins.h"
-#import "Coord.h"
+#import "Pin.h"
 #import "Constants.h"
 
 // Note to self: To prompt the user to re-enable location services just call
@@ -53,16 +53,11 @@
 	// But don't remove if something went wrong with the socket and we didn't get any new cameras
 	if( [pins count] != 0 )
 		[_map removeAnnotations:[_map annotations]];
-	for( Coord* pin in pins)
+	for( Pin* pin in pins)
 	{
 		@try {
-			// Convert from latitude / longitude to a MapBox coordinate
-			MGLPointAnnotation *point = [[MGLPointAnnotation alloc] init];
-			point.coordinate = CLLocationCoordinate2DMake(pin.latitude, pin.longitude);
-			point.title = [NSString stringWithFormat:@"Confirmations: %d", pin.verifications];
-			
 			// Add the pin to the map
-			[_map addAnnotation:point];
+			[_map addAnnotation:pin];
 		}
 		@catch( NSException* e )
 		{

@@ -17,7 +17,6 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@android:style/Theme.Black.NoTitleBar">
-        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
         <activity android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>

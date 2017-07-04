@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="track_default_value">position</string>
+    <string-array
+        name="track_values"
+        translatable="false">
+        <item>position</item>
+        <item>movement</item>
+    </string-array>
+</resources>

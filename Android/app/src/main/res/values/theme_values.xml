@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="theme_default_value">dark</string>
+    <string-array
+        name="theme_values"
+        translatable="false">
+        <item>light</item>
+        <item>dark</item>
+        <item>streets</item>
+        <item>satellite</item>
+    </string-array>
+</resources>

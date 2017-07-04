@@ -20,17 +20,28 @@
             android:defaultValue="false"
             android:key="show_score"
             android:title="@string/show_score_preference" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="use_satellite_map"
-            android:title="@string/use_satellite_map_preference" />
+        <ListPreference
+            android:key="theme"
+            android:title="@string/theme_preference"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="@string/theme_default_value"
+            />
+        <ListPreference
+            android:key="track"
+            android:title="@string/track_preference"
+            android:entries="@array/track_entries"
+            android:entryValues="@array/track_values"
+            android:defaultValue="@string/track_default_value"
+            />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/privacy_settings_description">
-        <CheckBoxPreference
-            android:defaultValue="true"
+        <Preference
+            android:selectable="false"
+            android:enabled="true"
             android:key="mapbox_analytics"
             android:title="@string/mapbox_analytics_preference"
-            android:summary="@string/mapbox_analytics_summary"/>
+            android:summary="@string/mapbox_analytics_summary" />
     </PreferenceCategory>
 </PreferenceScreen>

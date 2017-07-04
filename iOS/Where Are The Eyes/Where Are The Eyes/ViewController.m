@@ -16,6 +16,7 @@
 @interface ViewController () <MGLMapViewDelegate>
 	@property (strong) IBOutlet MGLMapView* map;
 	@property (weak, nonatomic) IBOutlet UIView* scorebar;
+	@property (weak, nonatomic) IBOutlet UIView* toolbar;
 	@property (strong) IBOutlet UILabel* usernameLabel;
 	@property (strong) IBOutlet UILabel* camerasMarkedLabel;
 	@property (strong) IBOutlet UILabel* verificationsLabel;
@@ -95,7 +96,16 @@
 
 	if( [scores scoresEnabled] )
 		[scores updateScores:self.getUsername];
-
+	
+	// We want single-tap to mark cameras, but double tap to zoom the map
+	UITapGestureRecognizer* doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:nil];
+	doubleTap.numberOfTapsRequired = 2;
+	[self.map addGestureRecognizer:doubleTap];
+	
+	UITapGestureRecognizer* singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(markPinAtTouch:)];
+	[singleTap requireGestureRecognizerToFail:doubleTap];
+	[singleTap setRequiresExclusiveTouchType:YES];
+	//[self.map addGestureRecognizer:singleTap];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -104,16 +114,58 @@
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	[self redrawScores:orientation];
 	
-	BOOL satelliteMap = [[NSUserDefaults standardUserDefaults] boolForKey:kSatelliteMap];
-	if( satelliteMap )
+	NSString* theme = [[NSUserDefaults standardUserDefaults] stringForKey:kMapTheme];
+	NSString* track = [[NSUserDefaults standardUserDefaults] stringForKey:kMapTracking];
+
+	// Set appropriate theme
+	if( [theme isEqualToString:kMapThemeLight] )
+		[self.map setStyleURL:[MGLStyle lightStyleURLWithVersion:9]];
+	else if( [theme isEqualToString:kMapThemeDark] )
+		[self.map setStyleURL:[MGLStyle darkStyleURLWithVersion:9]];
+	else if( [theme isEqualToString:kMapThemeSatellite] )
 		[self.map setStyleURL:[MGLStyle satelliteStreetsStyleURLWithVersion:9]];
 	else
 		[self.map setStyleURL:[MGLStyle streetsStyleURLWithVersion:9]];
+	
+	// Set correct tracking mode
+	if( [track isEqualToString:kMapTrackPosition] )
+		[self.map setUserTrackingMode:MGLUserTrackingModeFollow];
+	else if( [track isEqualToString:kMapTrackMovement] )
+		[self.map setUserTrackingMode:MGLUserTrackingModeFollowWithCourse];
+	else
+		[self.map setUserTrackingMode:MGLUserTrackingModeFollowWithHeading];	
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
 	[self redrawScores:toInterfaceOrientation];
+}
+
+// Set the map height appropriately to make room for the scorebar and iOS status bar
+- (void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+	
+	CGRect windowRect = self.view.window.frame;
+	CGRect toolbarRect = self.toolbar.frame;
+	
+	double otherElementHeight = toolbarRect.size.height;
+	double startingY = 0.0;
+	double mapHeight = 0.0;
+	
+	if( [scores scoresEnabled] )
+	{
+		otherElementHeight += kScorebarHeight;
+		startingY += kScorebarHeight;
+	}
+	
+	mapHeight = windowRect.size.height - otherElementHeight;
+	
+	// Make room for the little iOS status bar
+	if( [[UIDevice currentDevice] orientation] == UIInterfaceOrientationPortrait )
+		startingY += 20;
+	
+	[self.map setFrame:CGRectMake(0.0, startingY, windowRect.size.width, mapHeight)];
 }
 
 - (void)redrawScores:(UIInterfaceOrientation)orientation
@@ -126,9 +178,9 @@
 		CGRect windowSize = self.view.window.frame;
 		// If we're in portrait mode we need to make room for the status bar at the top
 		if( orientation == UIInterfaceOrientationPortrait )
-			box = [[UIView alloc] initWithFrame:CGRectMake(0, 20, windowSize.size.width, 20)];
+			box = [[UIView alloc] initWithFrame:CGRectMake(0, kScorebarHeight, windowSize.size.width, kScorebarHeight)];
 		else
-			box = [[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.size.height, 20)];
+			box = [[UIView alloc] initWithFrame:CGRectMake(0, 0, windowSize.size.height, kScorebarHeight)];
 		box.backgroundColor = [UIColor whiteColor];
 
 		// Add a line on the bottom before the map starts
@@ -158,12 +210,12 @@
 // This is part of being a MapView delegate, and would return a custom image
 // for pins if we wanted.
 - (MGLAnnotationImage*)mapView:(MGLMapView*)mapView imageForAnnotation:(id<MGLAnnotation>)annotation {
-	BOOL transparentPins = [[NSUserDefaults standardUserDefaults] boolForKey:kTransparentMarkers];
 	
-	// Get the correct pin image based on settings
-	NSString* pinName = @"map_pin";
-	if( transparentPins )
-		pinName = @"map_pin_transparent";
+	// We know every annotation on the map is really a point
+	// so we can use the "type" to figure out what image to render
+	// Pin* pin = (Pin*)annotation;
+	
+	NSString* pinName = pinName = @"map_pin_transparent";
 	
 	MGLAnnotationImage* pinImage = [mapView dequeueReusableAnnotationImageWithIdentifier:pinName];
 	if( !pinImage )
@@ -189,6 +241,9 @@
 
 - (UIView *)mapView:(MGLMapView *)mapView rightCalloutAccessoryViewForAnnotation:(id<MGLAnnotation>)annotation
 {
+	// No info button on the "You are here" annotation
+	if( annotation == mapView.userLocation )
+		return nil;
 	return [UIButton buttonWithType:UIButtonTypeInfoDark];
 }
 
@@ -213,9 +268,9 @@
 							style:UIAlertActionStyleDestructive
 							handler:^(UIAlertAction * _Nonnull action) {
 								CLLocationCoordinate2D c2d = [annotation coordinate];
-								Coord* c = [[Coord alloc] initLatitude:c2d.latitude longitude:c2d.longitude confirmations:0];
+								Pin* p = [[Pin alloc] initLatitude:c2d.latitude longitude:c2d.longitude confirmations:0 type:UNKNOWN];
 								dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-									[UnmarkPin unmarkPinAt:c withUsername:[self getUsername]];
+									[UnmarkPin unmarkPinAt:p withUsername:[self getUsername]];
 									[NSThread sleepForTimeInterval:kTimeoutAfterPosting];
 									[gps forcePinUpdate];
 									if( [scores scoresEnabled] )
@@ -293,7 +348,7 @@
 		UIAlertAction* mark = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
 																   style:UIAlertActionStyleDefault
 																 handler:^(UIAlertAction* action) {
-																	 [self markPin];
+																	 [self markPinHere];
 																 }];
 		
 		[confirm addAction:cancel];
@@ -301,7 +356,7 @@
 		[self presentViewController:confirm animated:YES completion:nil];
 		
 	} else {
-		[self markPin];
+		[self markPinHere];
 	}
 }
 
@@ -455,7 +510,7 @@
 	[self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)markPin
+- (void)markPin:(CLLocationCoordinate2D)coord
 {
 	NSString* username = [self getUsername];
 	if( username == nil )
@@ -463,16 +518,51 @@
 		[self displayNoUsernameAlert];
 		return;
 	}
-	CLLocationCoordinate2D coord = [gps lastCoord];
-	Coord* c = [[Coord alloc] initLatitude:coord.latitude longitude:coord.longitude confirmations:0];
+	Pin* p = [[Pin alloc] initLatitude:coord.latitude longitude:coord.longitude confirmations:0 type:UNKNOWN];
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		[MarkPin markPinAt:c withUsername:username];
+		[MarkPin markPinAt:p withUsername:username];
 		[NSThread sleepForTimeInterval:kTimeoutAfterPosting];
 		[gps forcePinUpdate];
 		if( [scores scoresEnabled] )
 			[scores updateScores:self.getUsername];
 	});	
+}
+
+// Marks a camera at the point the user tapped on the map
+// TODO: Fix this so it doesn't conflict with tapping on a camera pin to get information
+- (void)markPinAtTouch:(UITapGestureRecognizer *)tap
+{
+	BOOL tap_to_mark_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kTapToMark];
+	
+	if( tap_to_mark_enabled )
+	{
+		CLLocationCoordinate2D location = [self.map convertPoint:[tap locationInView:self.map]
+											toCoordinateFromView:self.map];
+		UIAlertController* confirm = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Confirm", nil)
+																		 message:NSLocalizedString(@"Mark a camera at tapped location?", nil)
+																  preferredStyle:UIAlertControllerStyleAlert];
+		
+		UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"No", nil)
+														 style:UIAlertActionStyleCancel
+													   handler:^(UIAlertAction* action) {}];
+		
+		UIAlertAction* mark = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes", nil)
+													   style:UIAlertActionStyleDefault
+													 handler:^(UIAlertAction* action) {
+														 [self markPin:location];
+													 }];
+		
+		[confirm addAction:cancel];
+		[confirm addAction:mark];
+		[self presentViewController:confirm animated:YES completion:nil];
+	}
+}
+
+- (void)markPinHere
+{
+	CLLocationCoordinate2D coord = [gps lastCoord];
+	[self markPin:coord];
 }
 
 - (void)recenterMap

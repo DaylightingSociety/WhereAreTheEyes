@@ -18,6 +18,7 @@
 
 - (IBAction)openSettings:(id)sender;
 - (IBAction)eyePressed:(id)sender;
-- (void)recenterMap;
+- (IBAction)personPressed:(id)sender;
+- (void)recenterMapWithAnimation:(Boolean)animated;
 
 @end

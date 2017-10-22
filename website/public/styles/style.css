@@ -102,6 +102,28 @@ a {
 	margin: auto;
 }
 
+.downloads-bar {
+	margin: auto;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	width: 62%;
+	height: 45px;
+	border: 1px solid black;
+	border-radius: 15px;
+	padding: 10px;
+	background: #EEEEEE;
+	overflow: hidden;
+}
+
+/* Little language buttons go on the top right */
+.language {
+	float: right;
+	text-align: right;
+	font-size: 15px;
+	line-height: 20px;
+	margin-top: 5px;
+}
+
 .footer, .stage:after {
 	height: 20px;
 }

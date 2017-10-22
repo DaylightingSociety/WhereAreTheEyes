@@ -15,6 +15,7 @@ require_relative 'log'
 require_relative 'location'
 require_relative 'ratelimit'
 require_relative 'export'
+require_relative 'rank'
 
 module State
 	$secret = ""
@@ -72,9 +73,13 @@ module State
 	private_class_method def State.killWatchdogProcess
 		if( File.exists?(Configuration::WatchdogPIDFile) )
 			begin
-				pid = File.read(Configuration::WatchdogPIDFile)
-				Process.kill("TERM", pid.to_i)
-				Log.notice("Killed existing watchdog process during startup #{pid.to_i}")
+				pid = File.read(Configuration::WatchdogPIDFile).to_i
+				if( pid != 0 )
+					Process.kill("TERM", pid)
+					Log.notice("Killed existing watchdog process during startup #{pid}")
+				else
+					Log.notice("No watchdog PID found in file, process may already be dead?")
+				end
 			rescue => e
 				Log.warning("Could not kill watchdog process: #{e.message}")
 				Log.warning("Kill watchdog backtrace: #{e.backtrace.to_s}")
@@ -151,6 +156,20 @@ module State
 		end
 	end
 
+	private_class_method def State.scoreboardCycle
+		loop do
+			begin
+				Log.debug("Recalculating scoreboard...")
+				Rank.saveRanks()
+				Log.debug("Initiating scoreboard sleep cycle...")
+				sleep (Configuration::ScoreboardPeriod)
+			rescue => e
+				Log.warning("Scoreboard thread crashed: #{e.message}")
+				Log.warning("Scoreboard thread crash backtrace:\n#{e.backtrace.to_s}")
+			end
+		end
+	end
+
 	def State.startWatchdog
 		fork do
 			$0 = Configuration::WatchdogProcessName
@@ -161,6 +180,7 @@ module State
 			backupThread = Thread.new do backupCycle end
 			ratelimitThread = Thread.new do ratelimitCycle end
 			exportThread = Thread.new do exportCycle end
+			scoreboardThread = Thread.new do scoreboardCycle end
 
 			# To prevent the subprocess from exiting we block the main thread
 			deprecationThread.join

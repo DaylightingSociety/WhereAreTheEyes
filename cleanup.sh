@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+#
+# This script clears a lot of junk we do not want to commit to
+# the repo. Mainly, it removes any debugging artifacts left by
+# XCode / Android Studio, and swaps out any debugging API key
+# for the real thing.
+#
+# Run this script once before committing *anything* to the repo.
+#
+
 # Set up a few shorthand variables
 DIR=$(dirname "$SCRIPT")
 WEB="$DIR/website"

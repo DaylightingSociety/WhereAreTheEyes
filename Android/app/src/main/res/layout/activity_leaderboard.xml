@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.daylightingsociety.wherearetheeyes.LeaderboardActivity"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/leaderboard_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/leaderboard"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center"
+            />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/leaderboard_title">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <LinearLayout
+                android:layout_weight="0.5"
+                android:gravity="center_horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/people"
+                    android:padding="20dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="0.5"
+                android:gravity="center_horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_height="25dp"
+                    android:layout_width="25dp"
+                    android:background="@drawable/camera"
+                    android:padding="20dip"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_height="25dp"
+                    android:layout_width="25dp"
+                    android:background="@drawable/badge"
+                    android:padding="20dip"
+                    />
+            </LinearLayout>
+
+        </TableRow>
+
+
+        <View
+            android:layout_height="2dip"
+            android:background="#FF909090" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:id="@+id/leaderboard_loading">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="3"
+                android:padding="10dp"
+                android:text="@string/leaderboard_loading"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+    </TableLayout>
+</RelativeLayout>

@@ -50,7 +50,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-final public class InfoWindowTipView extends View {
+final class InfoWindowTipView extends View {
     private Paint mPaint;
     private Path mPath;
 

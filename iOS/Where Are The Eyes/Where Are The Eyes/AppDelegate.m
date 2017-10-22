@@ -6,6 +6,7 @@
 //  Copyright © 2016 Daylighting Society. All rights reserved.
 //
 
+@import UserNotifications;
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "Constants.h"
@@ -19,7 +20,8 @@
 	// by their terms of service.
 	NSDictionary *userDefaultsDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
 										  [NSNumber numberWithBool:YES], kConfirmMarkingCameras,
-										  [NSNumber numberWithBool:NO], kShowScore,
+										  [NSNumber numberWithBool:YES], kShowMarkingNotifications,
+										  [NSNumber numberWithBool:YES], kShowScore,
 										  [NSNumber numberWithBool:YES], kMapboxMetrics,
 										  [NSNumber numberWithBool:NO], kTapToMark,
 										  kMapThemeLight, kMapTheme,
@@ -27,6 +29,18 @@
 										  nil];
 	[[NSUserDefaults standardUserDefaults] registerDefaults:userDefaultsDefaults];
 	[[NSUserDefaults standardUserDefaults] synchronize];
+	
+	// Ask for permission to send notifications
+	UNUserNotificationCenter* center = [UNUserNotificationCenter currentNotificationCenter];
+	UNAuthorizationOptions alertOptions = UNAuthorizationOptionAlert;
+	[center requestAuthorizationWithOptions:alertOptions
+						  completionHandler:^(BOOL granted, NSError * _Nullable error) {
+							  if (granted)
+								  NSLog(@"Notification permissions granted");
+							  else
+								  NSLog(@"Notification permissions denied");
+						  }];
+	[center setDelegate:self];
 	
     return YES;
 }
@@ -50,12 +64,17 @@
 	
 	// In this case we want to re-center the map on our current location
 	ViewController* mainController = (ViewController*)  self.window.rootViewController;
-	[mainController recenterMap];
+	[mainController recenterMapWithAnimation:false];
 	[mainController viewDidAppear:false]; // Reconfigure UI in case settings have changed
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+// Display notifications we've created even while in the foreground
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+	completionHandler(UNNotificationPresentationOptionAlert);
 }
 
 @end

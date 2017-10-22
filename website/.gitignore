@@ -1,8 +1,12 @@
 private/posts/*
 private/preview/*
+public/images/media/*.png
 # We ignore the geoip database to make it easy to update without caching lots
 # of versions in git. However, it can be downloaded at:
 #   http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 private/GeoLiteCity.dat
 # We want to ignore any type of pin or user database or backup.
 *.db
+*.csv
+*.pid
+secret.txt

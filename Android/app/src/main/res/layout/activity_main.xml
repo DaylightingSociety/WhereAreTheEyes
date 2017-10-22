@@ -10,6 +10,7 @@
     android:paddingTop="0dp"
     tools:context="org.daylightingsociety.wherearetheeyes.MainActivity">
 
+
     <com.mapbox.mapboxsdk.maps.MapView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -109,6 +110,23 @@
 
         <Space
             android:layout_width="1dp"
+            android:layout_weight=".10"
+            android:layout_height="wrap_content" />
+
+        <ImageButton
+            android:id="@+id/leaderboard"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical|start"
+            android:adjustViewBounds="true"
+            android:background="@drawable/list"
+            android:onClick="openLeaderboard"
+            android:scaleType="fitCenter" />
+
+        <Space
+            android:layout_width="1dp"
             android:layout_weight=".20"
             android:layout_height="wrap_content" />
 
@@ -129,6 +147,22 @@
             android:layout_weight=".20"
             android:layout_height="wrap_content" />
 
+        <ImageButton
+            android:id="@+id/centerCamera"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical|start"
+            android:adjustViewBounds="true"
+            android:background="@drawable/person"
+            android:onClick="recenterCamera"
+            android:scaleType="fitCenter" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_weight=".10"
+            android:layout_height="wrap_content" />
 
         <ImageButton
             android:id="@+id/help"

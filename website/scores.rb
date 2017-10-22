@@ -68,6 +68,19 @@ module Scores
 		return scores
 	end
 
+	# Warning: O(n) operation, should not be hooked up to an API call
+	def Scores.getAllScores()
+		scores = []
+		@@scores.transaction do
+			for user in @@scores.roots
+				if( user != "salt" )
+					scores << @@scores[user].clone
+				end
+			end
+		end
+		return scores
+	end
+
 	def Scores.addCamera(username)
 		@@scores.transaction do
 			name = hashUsername(username, @@scores['salt'])

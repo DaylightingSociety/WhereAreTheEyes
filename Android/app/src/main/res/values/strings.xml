@@ -26,6 +26,9 @@
     <string name="help_title">About "Where are the Eyes"</string>
     <string name="confirm_pins_preference">Confirm marking pins</string>
     <string name="show_score_preference">Show score</string>
+    <string name="tap_to_mark_preference">Tap map to mark camera</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="leaderboard_loading">Please wait while leaderboard loads...</string>
     <string name="theme_preference">Map Theme</string>
     <string-array
         name="theme_entries">
@@ -38,6 +41,7 @@
     <string-array
         name="track_entries">
         <item>Position</item>
+        <item>Direction</item>
         <item>Movement</item>
     </string-array>
     <string name="privacy_settings_description">Privacy Options</string>

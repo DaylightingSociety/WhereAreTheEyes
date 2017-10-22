@@ -332,7 +332,7 @@
 	BOOL confirmation_enabled = [[NSUserDefaults standardUserDefaults] boolForKey:kConfirmMarkingCameras];
 
 	// Always recenter when marking a pin so users aren't misled about where it will go
-	[self recenterMap];
+	[self recenterMapWithAnimation:false];
 
 	// Present a confirmation if asked for, otherwise just go for it and mark the pin.
 	if( confirmation_enabled )
@@ -358,6 +358,11 @@
 	} else {
 		[self markPinHere];
 	}
+}
+
+- (IBAction)personPressed:(id)sender
+{
+	[self recenterMapWithAnimation:true];
 }
 
 // When settings change we reset the score system
@@ -565,9 +570,18 @@
 	[self markPin:coord];
 }
 
-- (void)recenterMap
+- (void)recenterMapWithAnimation:(Boolean)animated
 {
-	[self.map setCenterCoordinate:[gps lastCoord]];
+	if( animated )
+	{
+		MGLMapCamera* userView = [MGLMapCamera cameraLookingAtCenterCoordinate:[gps lastCoord]
+																  fromDistance:500 pitch:0 heading:0];
+		[self.map setCamera:userView withDuration:1
+			animationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+	} else {
+		[self.map setCenterCoordinate:[gps lastCoord]];
+		[self.map setZoomLevel:15.0];
+	}
 }
 
 @end

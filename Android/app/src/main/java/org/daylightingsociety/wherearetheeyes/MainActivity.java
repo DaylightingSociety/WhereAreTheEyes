@@ -392,6 +392,11 @@ public class MainActivity extends Activity {
         startActivity(help);
     }
 
+    public void openLeaderboard(View view) {
+        Intent leaderboard = new Intent(this, LeaderboardActivity.class);
+        startActivity(leaderboard);
+    }
+
     public void recenterCamera(View view) {
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override

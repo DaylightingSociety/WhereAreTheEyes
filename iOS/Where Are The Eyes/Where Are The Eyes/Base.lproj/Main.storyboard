@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -85,7 +85,8 @@
                                     <constraint firstAttribute="width" constant="600" id="Ujw-OL-s99"/>
                                 </constraints>
                                 <items>
-                                    <barButtonItem width="35" style="plain" systemItem="fixedSpace" id="pOI-NE-a4C"/>
+                                    <barButtonItem width="5" style="plain" systemItem="fixedSpace" id="bmb-52-41C"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="tC4-hu-nFW"/>
                                     <barButtonItem image="cog.png" id="R21-O1-1DJ">
                                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -93,12 +94,29 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="AhI-x1-FlN"/>
+                                    <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="t8t-9j-Uo1"/>
+                                    <barButtonItem image="list.png" id="T5B-IJ-lsF">
+                                        <connections>
+                                            <action selector="badgePressed:" destination="BYZ-38-t0r" id="r2Z-No-hq7"/>
+                                            <segue destination="DYB-hk-h9v" kind="presentation" id="oeg-p7-0jK"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="7AJ-aY-7pI"/>
+                                    <barButtonItem width="25" style="plain" systemItem="fixedSpace" id="AlS-fb-Jnz"/>
                                     <barButtonItem image="eye.png" id="4LD-KQ-Qlt">
                                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <action selector="eyePressed:" destination="BYZ-38-t0r" id="fYY-G9-Gde"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="25" style="plain" systemItem="fixedSpace" id="ZaU-BD-uSJ"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="UTR-xV-iUJ"/>
+                                    <barButtonItem image="person.png" id="Qh7-sq-nWg">
+                                        <connections>
+                                            <action selector="personPressed:" destination="BYZ-38-t0r" id="00Z-Th-9QM"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="10" style="plain" systemItem="fixedSpace" id="p0F-TV-WVy"/>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="pLa-k6-V9j"/>
                                     <barButtonItem image="help.png" id="YUA-Tx-fln">
                                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -106,7 +124,8 @@
                                             <segue destination="WFE-He-oxJ" kind="presentation" id="Nc4-cW-f3X"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="35" style="plain" systemItem="fixedSpace" id="uKS-yG-c29"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="EOP-Pd-MXS"/>
+                                    <barButtonItem width="5" style="plain" systemItem="fixedSpace" id="dwD-yl-05R"/>
                                 </items>
                                 <color key="barTintColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <variation key="default">
@@ -289,13 +308,81 @@ Cg
             </objects>
             <point key="canvasLocation" x="1608.8" y="400.74962518740631"/>
         </scene>
+        <!--Leaderboard View Controller-->
+        <scene sceneID="JiU-oK-Kgi">
+            <objects>
+                <viewController id="DYB-hk-h9v" customClass="LeaderboardViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fYf-vK-Q9X"/>
+                        <viewControllerLayoutGuide type="bottom" id="WFV-ZJ-eLh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Vff-mX-vDC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KKk-aL-o41">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items>
+                                    <navigationItem title="Leaderboard" id="i1a-UL-PJO"/>
+                                </items>
+                            </navigationBar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l4Q-mI-8an">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="MZA-xZ-9g7"/>
+                                    <barButtonItem image="arrow_right.png" id="CWQ-DI-QaV">
+                                        <connections>
+                                            <action selector="handleBack:" destination="DYB-hk-h9v" id="g8x-Jp-Ufu"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fT6-sk-tMy">
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="zix-IC-Th6">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zix-IC-Th6" id="sXb-an-SSj">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="KKk-aL-o41" firstAttribute="top" secondItem="fYf-vK-Q9X" secondAttribute="bottom" id="300-ZI-tuj"/>
+                            <constraint firstItem="WFV-ZJ-eLh" firstAttribute="top" secondItem="l4Q-mI-8an" secondAttribute="bottom" id="B0S-SS-ezf"/>
+                            <constraint firstItem="fT6-sk-tMy" firstAttribute="top" secondItem="KKk-aL-o41" secondAttribute="bottom" id="O4M-pe-vN4"/>
+                            <constraint firstItem="l4Q-mI-8an" firstAttribute="centerX" secondItem="Vff-mX-vDC" secondAttribute="centerX" id="Orx-s6-6dQ"/>
+                            <constraint firstItem="KKk-aL-o41" firstAttribute="centerX" secondItem="Vff-mX-vDC" secondAttribute="centerX" id="aC3-Iy-Hb2"/>
+                            <constraint firstItem="l4Q-mI-8an" firstAttribute="width" secondItem="Vff-mX-vDC" secondAttribute="width" id="cYF-qa-XjF"/>
+                            <constraint firstItem="fT6-sk-tMy" firstAttribute="centerX" secondItem="Vff-mX-vDC" secondAttribute="centerX" id="dqt-Cm-NSx"/>
+                            <constraint firstItem="KKk-aL-o41" firstAttribute="width" secondItem="Vff-mX-vDC" secondAttribute="width" id="oI4-rd-KCh"/>
+                            <constraint firstItem="fT6-sk-tMy" firstAttribute="width" secondItem="Vff-mX-vDC" secondAttribute="width" id="vol-MI-EhH"/>
+                            <constraint firstItem="l4Q-mI-8an" firstAttribute="top" secondItem="fT6-sk-tMy" secondAttribute="bottom" id="ykm-F0-GuF"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eub-Hl-gRN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="856.79999999999995" y="1177.961019490255"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow_left.png" width="32" height="32"/>
+        <image name="arrow_right.png" width="32" height="32"/>
         <image name="camera.png" width="16" height="16"/>
-        <image name="cog.png" width="32" height="32"/>
+        <image name="cog.png" width="24" height="24"/>
         <image name="eye.png" width="48" height="48"/>
-        <image name="help.png" width="32" height="32"/>
+        <image name="help.png" width="24" height="24"/>
+        <image name="list.png" width="24" height="24"/>
+        <image name="person.png" width="24" height="24"/>
         <image name="thumb_up.png" width="16" height="16"/>
     </resources>
 </document>

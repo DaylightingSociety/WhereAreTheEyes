@@ -95,6 +95,18 @@ get '/rawdata' do
 	erb :rawdata, :locals => { :datadir => dirname, :files => filenames }
 end
 
+get '/rawdata/newest' do
+	filenames = Dir.entries(Configuration::ExportDir).select do |f|
+		File.file?(Configuration::ExportDir + "/" + f) and f.end_with?(".csv")
+	end
+	filenames.sort!
+	if( filenames.size > 0 )
+		redirect "/rawdata/#{filenames.pop}"
+	else
+		halt 404
+	end
+end
+
 get '/downloads' do
 	erb :downloads
 end
@@ -104,7 +116,7 @@ get '/downloads/ios' do
 end
 
 get '/downloads/android' do
-	redirect "https://play.google.com/store/apps/details?id=org.daylightingsociety.wherearetheeyes"
+	redirect "https://play.google.com/store/apps/details?id=org.daylightingsociety.wherearetheeyes&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
 end
 
 get '/downloads/f-droid' do

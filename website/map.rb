@@ -17,16 +17,19 @@ require_relative 'scores'
 =end
 
 class Pin
-	attr_reader :latitude, :longitude
+	attr_reader :latitude, :longitude, :type, :location
 	attr_reader :orig_latitude, :orig_longitude
 
+	# 24 hours in seconds, for deprecation
 	SecondsInDay = 86400
 
-	def initialize(latitude, longitude, creatorID)
+	def initialize(latitude, longitude, creatorID, type, location)
 		@latitude = latitude
 		@longitude = longitude
 		@orig_latitude = latitude
 		@orig_longitude = longitude
+		@type = type
+		@location = location
 		@verifies = [[hashUser(creatorID), timeStamp()]]
 	end
 
@@ -198,7 +201,12 @@ module Map
 
 	# If there are no pins close by then add a new one, otherwise
 	# verify the existing pin at that location
-	def self.addPin(lat, lon, username)
+	def self.addPin(lat, lon, type, location, username)
+		# Some Android systems return "0,0" when GPS isn't working correctly
+		# We never want to add these inadvertent pins
+		if( lat == 0.0 and lon == 0.0 )
+			return false
+		end
 		pins = loadPins(getZoneFile(lat, lon))
 		for p in pins
 			distance = Location.getDistance(p.latitude, p.longitude, lat, lon)
@@ -212,7 +220,7 @@ module Map
 			end
 		end
 		# Hey, we didn't find any similar pins! Great, mark down a new one
-		p = Pin.new(lat, lon, username)
+		p = Pin.new(lat, lon, username, type, location)
 		savePin(p)
 		Scores.addCamera(username)
 		return true # Added a new pin!

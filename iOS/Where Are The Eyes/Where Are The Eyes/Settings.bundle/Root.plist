@@ -42,7 +42,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Confirm marking cameras</string>
+			<string>Confirm Marking Cameras</string>
 			<key>Key</key>
 			<string>confirm_marking_cameras</string>
 			<key>DefaultValue</key>
@@ -52,11 +52,21 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Show score</string>
+			<string>Show Score</string>
 			<key>Key</key>
 			<string>show_score</string>
 			<key>DefaultValue</key>
-			<false/>
+			<true/>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Alert on Marking</string>
+			<key>Key</key>
+			<string>show_marking_notifications</string>
+			<key>DefaultValue</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>Type</key>

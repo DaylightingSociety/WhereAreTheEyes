@@ -73,6 +73,7 @@ module Backup
 	end
 
 	# Saves the current pin database state into an hourly backup folder
+	# Also save the login database
 	private_class_method def Backup.createNewSnapshot(time)
 		dstFolder = createHourlyFolder(time)
 		pinFiles = Dir.entries(Configuration::PinDir).select do |f| 
@@ -91,6 +92,15 @@ module Backup
 			ensure
 				f.close
 			end
+		end
+		begin
+			loginDB = Configuration::LoginDatabase
+			f = File.open(loginDB, "r")
+			f.flock(File::LOCK_EX)
+			fname = File.basename(loginDB)
+			FileUtils.cp(loginDB, dstFolder + "/" + fname)
+		ensure
+			f.close
 		end
 	end
 
@@ -145,7 +155,7 @@ module Backup
 		# Now we do the actual migration
 		dst = createDailyFolder(time)
 		for file in Dir.entries(hourlyDir + "/" + src)
-			if( file.end_with?(Configuration::PinDBSuffix) )
+			if( file.end_with?(Configuration::DBSuffix) )
 				FileUtils.cp("#{hourlyDir}/#{src}/#{file}", "#{dst}/#{file}")
 			end
 		end

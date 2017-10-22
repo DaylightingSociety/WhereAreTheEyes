@@ -2,9 +2,9 @@
 <resources>
     <string name="track_default_value">position</string>
     <string-array
-        name="track_values"
-        translatable="false">
+        name="track_values">
         <item>position</item>
+        <item>direction</item>
         <item>movement</item>
     </string-array>
 </resources>

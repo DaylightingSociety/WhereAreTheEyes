@@ -20,6 +20,10 @@
             android:defaultValue="false"
             android:key="show_score"
             android:title="@string/show_score_preference" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="tap_to_mark"
+            android:title="@string/tap_to_mark_preference" />
         <ListPreference
             android:key="theme"
             android:title="@string/theme_preference"

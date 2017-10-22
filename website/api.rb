@@ -57,20 +57,41 @@ get '/getScore/:username' do |username|
 	end
 end
 
+# Returns the leaderboard in CSV format
+# Format is "num_users,cameras_needed,rank_title"
+get '/getLeaderboard' do
+	sbFile = Configuration::ScoreboardData
+	if( Configuration::ScoreboardEnabled and File.exists?(sbFile) )
+		return File.read(sbFile)
+	else
+		return ""
+	end
+end
+
 # Gathers username and coordinates, marks or verifies the pin *if* the user
 # exists.
 post '/markPin' do
 	username = params['username']
 	longitude = params['longitude'].to_f
 	latitude = params['latitude'].to_f
-	unless( Location.ipInRange?(request.ip, latitude, longitude) )
-		return "ERROR: Geoip out of range\n"
+	type = params['type']
+	location = params['location']
+
+	# Set type to unknown if it doesn't match what we recognize
+	if( type.nil? or not ["fixed", "panning", "dome"].include?(type) )
+		type = "camera"
 	end
+
+	# Similarly, set location to unknown if we can't parse it
+	if( location.nil? or not ["public", "indoor", "outdoor"].include?(location) )
+		location = "UNKNOWN"
+	end
+
 	if( Auth.validLogin?(username) )
 		if( RateLimit.rateExceeded?(request.ip) )
 			return "ERROR: Rate limit exceeded\n"
 		else
-			Map.addPin(latitude, longitude, username)
+			Map.addPin(latitude, longitude, type, location, username)
 			RateLimit.addRecord(request.ip)
 			return "SUCCESS: Pin posted or verified\n"
 		end
@@ -85,9 +106,6 @@ post '/unmarkPin' do
 	username = params['username']
 	longitude = params['longitude'].to_f
 	latitude = params['latitude'].to_f
-	unless( Location.ipInRange?(request.ip, latitude, longitude) )
-		return "ERROR: Geoip out of range\n"
-	end
 	if( Auth.validLogin?(username) )
 		if( RateLimit.rateExceeded?(request.ip) )
 			return "ERROR: Rate limit exceeded\n"

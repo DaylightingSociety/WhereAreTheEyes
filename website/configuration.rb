@@ -14,7 +14,8 @@ module Configuration
 	ExportImageScript = File.dirname(__FILE__) + "/camimage.py"
 	LoginDatabase = Private + "/login.db"
 	ScoreDatabase = Private + "/scores.db"
-	GeoIPDatabase = Private + "/GeoLiteCity.dat"
+	RankList = Private + "/ranks.csv"
+	ScoreboardData = Private + "/scoreboard.csv"
 	ExportImagePath = Public + "/currentCameras.png"
 
 	# Logging config
@@ -48,8 +49,9 @@ module Configuration
 	RateThreshold = 50 # Can't mark more than 50 cams in 5 minutes
 	RateBlacklistPeriod = 1800 # Half an hour in seconds
 
-	# GeoIP configuration
-	IPProximityThreshold = 112654 # 70 miles in meters
+	# LanguageConfig
+	AcceptedLanguages = ["en", "pt"]
+	DefaultLanguage = "en"
 
 	# Cookie (used during registration) config
 	CookieSecretPath = Private + "/secret.txt"
@@ -64,6 +66,7 @@ module Configuration
 	BackupRolloverHour = 4 # When do we rotate backups (4 AM)
 	WatchdogProcessName = "WhereAreTheEyes Watchdog"
 	WatchdogPIDFile = Tmp + "/watchdog.pid"
+	DBSuffix = ".db"
 
 	# Export Config
 	ExportEnabled = true
@@ -75,4 +78,8 @@ module Configuration
 	MaxPinPostRadius = 1000 # Not allowed to post a pin if you're far away
 	PinOverlapRadius = 5 # Pins closer than PinOverlapRadius meters are same pin
 	PinDBSuffix = ".db"
+
+	# Scoreboard config
+	ScoreboardEnabled = true
+	ScoreboardPeriod = 3600 # Recalculate scoreboard hourly
 end

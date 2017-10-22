@@ -1,8 +1,11 @@
 #!/usr/local/bin/ruby
 # encoding: UTF-8
 require 'sinatra'
-require 'encrypted_cookie'
 require 'tilt/erb'
+
+if( Sinatra::Base.production? )
+	require 'encrypted_cookie'
+end
 
 require_relative 'static'
 require_relative 'rss'
@@ -24,9 +27,12 @@ not_found do
 end
 
 # This block forces SSL for all users all the time.
-before '*' do
-	if( request.url.start_with?("http://") )
-		redirect to(request.url.sub("http", "https"))
+# Always on in deployment, but unnecessary when debugging locally
+if( Sinatra::Base.production? )
+	before '*' do
+		if( request.url.start_with?("http://") )
+			redirect to(request.url.sub("http", "https"))
+		end
 	end
 end
 
@@ -35,4 +41,6 @@ State.init
 State.startWatchdog
 
 # Set up encrypted session cookies for use during registration
-use Rack::Session::EncryptedCookie, :secret => State.getSecret(), :expire_after => Configuration::CookieDuration
+if( Sinatra::Base.production? )
+	use Rack::Session::EncryptedCookie, :secret => State.getSecret(), :expire_after => Configuration::CookieDuration
+end

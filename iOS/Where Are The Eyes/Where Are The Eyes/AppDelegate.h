@@ -6,9 +6,10 @@
 //  Copyright © 2016 Daylighting Society. All rights reserved.
 //
 
+@import UserNotifications;
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UNUserNotificationCenterDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

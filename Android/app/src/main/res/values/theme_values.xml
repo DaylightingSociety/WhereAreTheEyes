@@ -2,8 +2,7 @@
 <resources>
     <string name="theme_default_value">dark</string>
     <string-array
-        name="theme_values"
-        translatable="false">
+        name="theme_values">
         <item>light</item>
         <item>dark</item>
         <item>streets</item>

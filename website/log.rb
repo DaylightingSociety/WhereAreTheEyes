@@ -14,27 +14,47 @@ module Log
 	def self.init()
 		options = Syslog::LOG_PID | Syslog::LOG_CONS | Syslog::LOG_NDELAY
 		Syslog.open(Configuration::LogName, options, Syslog::LOG_DAEMON)
+		if( ENV['TERM'] != nil and ENV['TERM'].length > 0 )
+			@@terminal = true
+		else
+			@@terminal = false
+		end
 	end
 
 	def self.alert(msg)
 		Syslog.log(Syslog::LOG_ALERT, msg.to_s)
+		if( @@terminal )
+			$stderr.puts(msg.to_s)
+		end
 	end
 
 	def self.warning(msg)
 		Syslog.log(Syslog::LOG_WARNING, msg.to_s)
+		if( @@terminal )
+			$stderr.puts(msg.to_s)
+		end
 	end
 
 	def self.error(msg)
 		Syslog.log(Syslog::LOG_ERR, msg.to_s)
+		if( @@terminal )
+			$stderr.puts(msg.to_s)
+		end
 	end
 
 	def self.notice(msg)
 		Syslog.log(Syslog::LOG_NOTICE, msg.to_s)
+		if( @@terminal )
+			$stderr.puts(msg.to_s)
+		end
 	end
 
 	def self.debug(msg)
 		if( Configuration::DebugEnabled )
 			Syslog.log(Syslog::LOG_DEBUG, msg.to_s)
+			if( @@terminal )
+				$stderr.puts(msg.to_s)
+			end
 		end
 	end
 end

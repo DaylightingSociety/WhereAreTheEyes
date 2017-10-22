@@ -14,6 +14,7 @@
 #define kProjectName @"Where are the Eyes"
 #define kUsernameString @"username_preference"
 #define kConfirmMarkingCameras @"confirm_marking_cameras"
+#define kShowMarkingNotifications @"show_marking_notifications"
 #define kShowScore @"show_score"
 #define kMapboxMetrics @"MGLMapboxMetricsEnabled"
 #define kMapTheme @"theme"

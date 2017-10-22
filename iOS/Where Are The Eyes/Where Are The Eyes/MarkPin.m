@@ -11,6 +11,7 @@
 #import "MarkPin.h"
 #import "Constants.h"
 #import "Vibrate.h"
+#import "Notifications.h"
 
 @implementation MarkPin
 
@@ -39,9 +40,16 @@
 	NSData* requestBodyData = [data dataUsingEncoding:NSUTF8StringEncoding];
 	[request setHTTPBody:requestBodyData];
 	
+	// Make UI for network activity visible
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	
 	// Send the request, read the response the server sends
 	NSData* returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
 	NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
+	
+	// We're done - network activity spinner can go away
+	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	
 	
 	NSLog(@"Response from marking pin: %@", response);
 	[self parseResponse:response];
@@ -61,6 +69,8 @@
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"RateLimitError" object:self];
 	else if( [response hasPrefix:@"ERROR:"] )
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"ErrorMarkingCamera" object:self];
+	else if( [response hasPrefix:@"SUCCESS"] )
+		[Notifications notifyAlert:@"Camera marked successfully" message:@"Thank you for your contribution" ifPermission:kShowMarkingNotifications];
 }
 
 @end

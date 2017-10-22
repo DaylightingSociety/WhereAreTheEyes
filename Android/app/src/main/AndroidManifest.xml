@@ -38,5 +38,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".LeaderboardActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.LEADERBOARD" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

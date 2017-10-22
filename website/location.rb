@@ -1,33 +1,14 @@
 #!/usr/bin/env ruby
 
-require 'geoip'
-
 require_relative 'configuration'
 
 =begin
 	This module is responsible for everything to do with location and distance.
-	It calculates the distance between two GPS coordinates, or returns the
-	approximate GPS coordinates of an IP address to perform reverse lookups.
+	It calculates the distance between two GPS coordinates
 =end
 
 module Location
-
 	def self.init
-		@@geoip = GeoIP.new(Configuration::GeoIPDatabase)
-	end
-
-	# Returns whether an IP address is close enough to a latitude
-	# longitude that it's feasible their location is correct.
-	def self.ipInRange?(ip, lat, lon)
-		(physical_lat, physical_lon) = getCoordinatesOfIP(ip)
-		if( physical_lat.nil? or physical_lon.nil? )
-			return false
-		end
-		dist = getDistance(lat, lon, physical_lat, physical_lon)
-		if( dist > Configuration::IPProximityThreshold )
-			return false
-		end
-		return true
 	end
 
 	# Returns distance in meters between two GPS coordinates
@@ -50,16 +31,5 @@ module Location
 		c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
 
 		rm * c # Delta in meters
-	end
-
-	# Returns (latitude, longitude) if address is valid
-	# Returns (nil, nil) if we can't resolve it
-	def self.getCoordinatesOfIP(address)
-		lookup = @@geoip.city(address)
-		if( lookup.nil? )
-			return [nil, nil]
-		else
-			return [lookup.latitude, lookup.longitude]
-		end		
 	end
 end

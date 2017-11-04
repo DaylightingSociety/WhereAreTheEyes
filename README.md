@@ -8,14 +8,11 @@ You can read [more on our website!](https://eyes.daylightingsociety.org)
 
 ## Public Repository
 
-This repository shows all of the code we have sent to the App or Play stores. It may not be up to date with what we are developing internally, but any code that runs on your device will always be public.
-
+The master branch of this repo represents the code currently on the App and Play Stores, as well as F-Droid. Code we are currently developing will be on other branches.
 
 ### Is anything different between this code and what is on my phone?
 
-We have removed the API keys that identify *Where are the Eyes* to [MapBox](https://www.mapbox.com/), so people cannot trivially impersonate us and drive up costs.
-
-You can see the exact changes made in our `cleanup.sh` script.
+The apps on the App and Play stores will be cryptographically signed, but the code is identical.
 
 ## How do I build *Where are the Eyes*?
 
@@ -41,8 +38,7 @@ If you want to run the server code for testing, we built it to be embedded in Ap
 
 ## How can I contribute?
 
-Please help by making issues for bugs or feature suggestions! We love when people send us patches, but will probably not accept pull requests directly so that this repo always shows the version of the codebase running on people's phones.
-
+We love bug reports, feature suggestions, and code contributions! We will not accept pull requests to master, since that code represents what is currently released on the App and Play stores.
 
 ## License
 

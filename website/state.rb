@@ -89,7 +89,7 @@ module State
 
 	private_class_method def State.recordWatchdogPID
 		begin
-			File.write(Configuration::WatchdogPIDFile, Process.pid.to_s)
+			File.write(Configuration::WatchdogPIDFile, Process.pid.to_s + "\n")
 			Log.notice("Recorded watchdog process PID (#{Process.pid.to_s})")
 		rescue => e
 			Log.warning("Could not record watchdog PID: #{e.message}")
@@ -144,11 +144,11 @@ module State
 			begin
 				Log.debug("Initiating export sleep cycle...")
 				sleep (Configuration::ExportPeriod)
-				target = Time.now.strftime("%Y-%m-%d.csv")
-				path = Export.exportPinsCSV(target)
+				path = Export.exportPinsCSV(Time.now.strftime("%Y-%m-%d.csv"))
 				if( Configuration::ExportImageEnabled )
 					system("#{Configuration::ExportImageScript} #{path} #{Configuration::ExportImagePath}")
 				end
+				Export.exportPinsKML(Time.now.strftime("%Y-%m-%d.kml"))
 			rescue => e
 				Log.warning("Export thread crashed: #{e.message}")
 				Log.warning("Export thread crash backtrace:\n#{e.backtrace.to_s}")

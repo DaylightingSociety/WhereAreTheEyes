@@ -107,6 +107,18 @@ get '/rawdata/newest' do
 	end
 end
 
+get '/rawdata/newest/kml' do
+	filenames = Dir.entries(Configuration::ExportDir).select do |f|
+		File.file?(Configuration::ExportDir + "/" + f) and f.end_with?(".kml")
+	end
+	filenames.sort!
+	if( filenames.size > 0 )
+		redirect "/rawdata/#{filenames.pop}"
+	else
+		halt 404
+	end
+end
+
 get '/downloads' do
 	erb :downloads
 end

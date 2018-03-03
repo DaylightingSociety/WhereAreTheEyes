@@ -40,7 +40,7 @@ module Export
 		f.write(header)
 		for cam in data
 			f.write("<Placemark>\n<Point><coordinates>")
-			f.write("#{cam[0]},#{cam[1]},0")
+			f.write("#{cam[1]},#{cam[0]},0")
 			f.write("</coordinates></Point>\n</Placemark>\n")
 		end
 		f.write(footer)

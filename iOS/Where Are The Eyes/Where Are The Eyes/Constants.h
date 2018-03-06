@@ -11,6 +11,7 @@
 
 #define kEyesURL @"https://eyes.daylightingsociety.org"
 #define kRegisterURL @"https://eyes.daylightingsociety.org/register"
+#define kVerifyUsernameURL @"https://eyes.daylightingsociety.org/validUsername"
 #define kProjectName @"Where are the Eyes"
 #define kUsernameString @"username_preference"
 #define kConfirmMarkingCameras @"confirm_marking_cameras"

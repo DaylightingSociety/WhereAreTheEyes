@@ -49,7 +49,15 @@
 	//
 	// Then we validate our current configuration
 	//
+	NSLog(@"About to test username");
+	if( [self getUsername] == nil )
+		[self displayNoUsernameAlert];
+	NSLog(@"Sanitizing username");
 	[self sanitizeUsername];
+	// User may have set a username after getting the 'no username' alert
+	// TODO: We will enable username validation once the API call is faster!
+	//if( [self getUsername] != nil )
+		//[self validateUsername];
 	
 	//
 	// Finally we register a few event handlers
@@ -288,7 +296,7 @@
 - (IBAction)openSettings:(id)sender
 {
 	NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-	[[UIApplication sharedApplication] openURL:url];
+	[[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
 }
 
 // Returns the current username
@@ -324,7 +332,46 @@
 		
 		return strippedReplacement;
 	}
+
 	return username;
+}
+
+- (void)validateUsername
+{
+	NSLog(@"Validating username...");
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		NSString* usernamePath = [NSString stringWithFormat:@"%@/%@", kVerifyUsernameURL, [self getUsername]];
+		NSURL* url = [[NSURL alloc] initWithString:usernamePath];
+		NSLog(@"Going to validate with URL: %@", usernamePath);
+
+		NSError *error = nil;
+		NSStringEncoding encoding = 0;
+		NSString* data = [NSString stringWithContentsOfURL:url usedEncoding:&encoding error:&error];
+
+		NSLog(@"Validation result: %@", data);
+
+		if( [data hasPrefix:@"SUCCESS"] )
+			NSLog(@"Username confirmed 'valid' by server");
+		else if( [data hasPrefix:@"ERROR"] ) {
+			UIAlertController* alert = [UIAlertController
+										alertControllerWithTitle:@"Invalid Username"
+										message:@"We could not validate your username with the Where are the Eyes server. You will be unable to mark and unmark cameras setting a registered username in settings."
+										preferredStyle:UIAlertControllerStyleAlert];
+			UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil)
+															 style:UIAlertActionStyleCancel
+														   handler:^(UIAlertAction* action) {}];
+			UIAlertAction* settings = [UIAlertAction actionWithTitle:NSLocalizedString(@"Open Settings", nil)
+															 style:UIAlertActionStyleDefault
+															 handler:^(UIAlertAction* action) {[self openSettings:nil];}];
+			[alert addAction:cancel];
+			[alert addAction:settings];
+
+			// UI Interactions have to occur on the main thread
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self presentViewController:alert animated:YES completion:nil];
+			});
+		}
+	});
 }
 
 - (IBAction)eyePressed:(id)sender
@@ -394,7 +441,7 @@
 	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:NSLocalizedString(@"Register", nil)
 															   style:UIAlertActionStyleDefault
 															 handler:^(UIAlertAction* action) {
-																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL]];
+																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL] options:@{} completionHandler:nil];
 															 }];
 	
 	
@@ -507,7 +554,7 @@
 	UIAlertAction* registerUsername = [UIAlertAction actionWithTitle:NSLocalizedString(@"Register", nil)
 															   style:UIAlertActionStyleDefault
 															 handler:^(UIAlertAction* action) {
-																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL]];
+																 [[UIApplication sharedApplication] openURL:[NSURL URLWithString: kRegisterURL] options:@{} completionHandler:nil];
 															 }];
 	
 	[alert addAction:cancel];

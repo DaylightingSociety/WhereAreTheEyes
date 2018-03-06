@@ -1,5 +1,6 @@
 #require 'pathname'
 require 'bcrypt'
+require 'digest'
 require 'zlib'
 require 'set'
 
@@ -20,10 +21,15 @@ AuthFile = Configuration::LoginDatabase
 
 class Account
 	def initialize(username)
-		@creds = BCrypt::Password.create(username, :cost => Configuration::HashCost)
+		@creds = Account.hash(username)
 	end
 
-	def correctLogin?(username)
+	def Account.hash(username)
+		salt = File.read(Configuration::CookieSecretPath)
+		Digest::SHA256.digest(salt + username)
+	end
+
+	def bcryptCorrectLogin?(username)
 		return @creds == (username) # Isn't BCrypt awesome? Overloads comparison
 	end
 end
@@ -58,11 +64,25 @@ module Auth
 		f = File.open(AuthFile, "r")
 		auth = Marshal.load(Zlib::Inflate.inflate(f.read))
 		f.close
-		for act in auth
-			if( act.correctLogin?(username) )
-				return true
+
+		acct = Account.new(username)
+		if( auth.include?(acct) )
+			return true
+		end
+
+		# Alright, let's check the legacy database, too
+		if( File.exists?(Configuration::LoginLegacyDatabase) )
+			f = File.open(AuthFile, "r")
+			auth = Marshal.load(Zlib::Inflate.inflate(f.read))
+			f.close
+			
+			for act in auth
+				if( act.correctLogin?(username) )
+					return true
+				end
 			end
 		end
+
 		return false
 	end
 end
@@ -87,8 +107,6 @@ post '/register' do
 		erb :register, :locals => {:errorMsg => "Bots are not allowed! Please check the 'Are you human' box.", :token => session['token']}
 	elsif( username.length < 1 )
 		erb :register, :locals => {:errorMsg => "Username must be at least one letter long!", :token => session['token']}
-	elsif( Auth.validLogin?(username) )
-		erb :register, :locals => {:errorMsg => "Account already exists!", :token => session['token']}
 	elsif( username.match(/[^A-Za-z0-9_]/) )
 		erb :register, :locals => {:errorMsg => "Username may not contain characters besides A-Za-z0-9_", :token => session['token']}
 	elsif( username.size > maxuserlen )

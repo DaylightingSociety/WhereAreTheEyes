@@ -13,6 +13,7 @@ module Configuration
 	ExportDir = Public + "/rawdata"
 	ExportImageScript = File.dirname(__FILE__) + "/camimage.py"
 	LoginDatabase = Private + "/login.db"
+	LoginLegacyDatabase = Private + "/login_legacy.db"
 	ScoreDatabase = Private + "/scores.db"
 	RankList = Private + "/ranks.csv"
 	ScoreboardData = Private + "/scoreboard.csv"

@@ -121,3 +121,13 @@ post '/unmarkPin' do
 		return "ERROR: Permission denied\n"
 	end
 end
+
+# Allow app to confirm usernames are valid as soon as the user sets one in
+# preferences. An error means the username is invalid or something crashed
+get '/validUsername/:username' do |username|
+	if( Auth.validLogin?(username) )
+		return "SUCCESS: Username is valid\n"
+	else
+		return "ERROR: Username invalid\n"
+	end
+end

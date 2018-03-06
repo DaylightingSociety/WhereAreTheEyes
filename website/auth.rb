@@ -71,6 +71,7 @@ module Auth
 		end
 
 		# Alright, let's check the legacy database, too
+		foundLegacyAccount = false
 		if( File.exists?(Configuration::LoginLegacyDatabase) )
 			f = File.open(Configuration::LoginLegacyDatabase, "r")
 			auth = Marshal.load(Zlib::Inflate.inflate(f.read))
@@ -78,9 +79,16 @@ module Auth
 			
 			for act in auth
 				if( act.bcryptCorrectLogin?(username) )
-					return true
+					foundLegacyAccount = true
+					break
 				end
 			end
+		end
+
+		# Put them in the new login db to make this faster in the future
+		if( foundLegacyAccount )
+			Auth.addAccount(username)
+			return true
 		end
 
 		return false

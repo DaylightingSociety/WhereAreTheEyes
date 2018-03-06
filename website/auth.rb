@@ -49,7 +49,7 @@ module Auth
 		f = File.open(AuthFile, "r+")
 		f.flock(File::LOCK_EX)
 		auth = Marshal.load(Zlib::Inflate.inflate(f.read))
-		auth.add(Account.new(username))
+		auth.add(Account.hash(username))
 		f.rewind
 		f.truncate(f.pos)
 		f.puts(Zlib::Deflate.deflate(Marshal.dump(auth)))
@@ -65,14 +65,14 @@ module Auth
 		auth = Marshal.load(Zlib::Inflate.inflate(f.read))
 		f.close
 
-		acct = Account.new(username)
-		if( auth.include?(acct) )
+		hash = Account.hash(username)
+		if( auth.include?(hash) )
 			return true
 		end
 
 		# Alright, let's check the legacy database, too
 		if( File.exists?(Configuration::LoginLegacyDatabase) )
-			f = File.open(AuthFile, "r")
+			f = File.open(Configuration::LoginLegacyDatabase, "r")
 			auth = Marshal.load(Zlib::Inflate.inflate(f.read))
 			f.close
 			

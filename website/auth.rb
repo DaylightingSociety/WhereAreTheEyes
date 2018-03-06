@@ -77,7 +77,7 @@ module Auth
 			f.close
 			
 			for act in auth
-				if( act.correctLogin?(username) )
+				if( act.bcryptCorrectLogin?(username) )
 					return true
 				end
 			end

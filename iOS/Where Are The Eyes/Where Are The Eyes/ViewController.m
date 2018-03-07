@@ -49,9 +49,6 @@
 	//
 	// Then we validate our current configuration
 	//
-	NSLog(@"About to test username");
-	if( [self getUsername] == nil )
-		[self displayNoUsernameAlert];
 	NSLog(@"Sanitizing username");
 	[self sanitizeUsername];
 	// User may have set a username after getting the 'no username' alert
@@ -141,7 +138,12 @@
 	else if( [track isEqualToString:kMapTrackMovement] )
 		[self.map setUserTrackingMode:MGLUserTrackingModeFollowWithCourse];
 	else
-		[self.map setUserTrackingMode:MGLUserTrackingModeFollowWithHeading];	
+		[self.map setUserTrackingMode:MGLUserTrackingModeFollowWithHeading];
+	
+	NSLog(@"About to test username");
+	NSString* username = [self getUsername];
+	if( username == nil || username.length == 0 )
+		[self displayNoUsernameAlert];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -544,7 +546,7 @@
 - (void)displayNoUsernameAlert
 {
 	UIAlertController* alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"No username set", nil)
-																   message:NSLocalizedString(@"Please register a username online and set it in Settings", nil)
+																   message:NSLocalizedString(@"Please register a username online and set it in Settings. Until you do, you will be unable to mark cameras.", nil)
 															preferredStyle:UIAlertControllerStyleAlert];
 	
 	UIAlertAction* cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Dismiss", nil)

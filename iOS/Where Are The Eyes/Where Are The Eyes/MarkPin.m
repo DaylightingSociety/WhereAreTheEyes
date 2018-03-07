@@ -20,6 +20,10 @@
 	NSLog(@"Marking pin at lat:%f lon:%f with username %@", p.latitude, p.longitude, username);
 	[Vibrate pulse]; // Let the user know their mark request has been noticed
 	
+	// Create some HTTP objects we'll need later
+	NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession* session = [NSURLSession sessionWithConfiguration:config];
+	
 	// Set the URL and create an HTTP request
 	NSString* markUrl = [kEyesURL stringByAppendingString:@"/markPin"];
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:markUrl]];
@@ -43,16 +47,18 @@
 	// Make UI for network activity visible
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	
-	// Send the request, read the response the server sends
-	NSData* returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
+	// Prepare the request and its response handler
+	NSURLSessionUploadTask* httpReq = [session uploadTaskWithRequest:request fromData:requestBodyData completionHandler:^(NSData * _Nullable returnData, NSURLResponse * _Nullable _, NSError * _Nullable error) {
+		NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
+		
+		NSLog(@"Response from marking pin: %@", response);
+		[self parseResponse:response];
+	}];
+	
+	[httpReq resume];
 	
 	// We're done - network activity spinner can go away
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	
-	
-	NSLog(@"Response from marking pin: %@", response);
-	[self parseResponse:response];
 	
 	return nil;
 }

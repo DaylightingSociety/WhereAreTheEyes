@@ -19,6 +19,10 @@
 	NSLog(@"Unmarking pin at lat:%f lon:%f with username %@", p.latitude, p.longitude, username);
 	[Vibrate pulse]; // Let the user know their unmark request has been noticed
 	
+	// Create some HTTP objects we'll need later
+	NSURLSessionConfiguration* config = [NSURLSessionConfiguration defaultSessionConfiguration];
+	NSURLSession* session = [NSURLSession sessionWithConfiguration:config];
+	
 	// Set the URL and create an HTTP request
 	NSString* unmarkUrl = [kEyesURL stringByAppendingString:@"/unmarkPin"];
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:unmarkUrl]];
@@ -43,15 +47,18 @@
 	// Fire up the spinner
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	
-	// Send the request, read the response the server sends
-	NSData* returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
+	// Prepare the request and its response handler
+	NSURLSessionUploadTask* httpReq = [session uploadTaskWithRequest:request fromData:requestBodyData completionHandler:^(NSData * _Nullable returnData, NSURLResponse * _Nullable _, NSError * _Nullable error) {
+		NSString* response = [[NSString alloc] initWithBytes:[returnData bytes] length:[returnData length] encoding:NSUTF8StringEncoding];
+		
+		NSLog(@"Response from unmarking pin: %@", response);
+		[self parseResponse:response];
+	}];
+
+	[httpReq resume]; // Actually send the request
 	
 	// We're done - network activity spinner can go away
 	[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	
-	NSLog(@"Response from unmarking pin: %@", response);
-	[self parseResponse:response];
 	
 	return nil;
 }

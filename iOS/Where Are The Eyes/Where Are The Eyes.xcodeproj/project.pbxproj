@@ -316,6 +316,7 @@
 				268F327C1CA2F73400844B62 /* Frameworks */,
 				267BB1601CC2D99000418D8E /* CopyFiles */,
 				26F92E0F1D93A0B400B8A72D /* ShellScript */,
+				264C574E204F886600EF2D8C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -472,6 +473,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		264C574E204F886600EF2D8C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mapbox.framework/strip-frameworks.sh\"";
+		};
 		26F92E0F1D93A0B400B8A72D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

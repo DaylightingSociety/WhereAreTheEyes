@@ -138,7 +138,11 @@ module Map
 		path = Configuration::PinDir + "/" + filename
 		if( File.exists?(path) )
 			data = File.read(Configuration::PinDir + "/" + filename)
-			return Marshal.load(Zlib::Inflate.inflate(data))
+			if( data.length > 0 )
+				return Marshal.load(Zlib::Inflate.inflate(data))
+			else
+				return []
+			end
 		else
 			return []
 		end
